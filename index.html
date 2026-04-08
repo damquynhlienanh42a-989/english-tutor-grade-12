@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🎧 English Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9fafb;
+      color: #222;
+      margin: 40px;
+    }
+    #chat {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      height: 400px;
+      overflow-y: auto;
+    }
+    input {
+      width: 70%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 15px;
+      margin-left: 10px;
+      border-radius: 8px;
+      border: none;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎧 English Chatbot with Voice</h2>
+  <div id="chat"></div>
+
+  <input id="message" placeholder="Type or speak...">
+  <button onclick="sendMessage()">Send</button>
+  <button id="mic">🎤 Speak</button>
+
+  <script>
+    const chat = document.getElementById("chat");
+    const micBtn = document.getElementById("mic");
+    const messageInput = document.getElementById("message");
+
+    // 🧠 Send message to Flask
+    async function sendMessage() {
+      const message = messageInput.value.trim();
+      if (!message) return;
+
+      chat.innerHTML += `<p><b>You:</b> ${message}</p>`;
+      messageInput.value = "";
+
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message})
+      });
+      const data = await res.json();
+      const reply = data.reply || "(No reply)";
+      chat.innerHTML += `<p><b>Bot:</b> ${reply}</p>`;
+      chat.scrollTop = chat.scrollHeight;
+
+      // 🔊 Bot speaks
+      const speech = new SpeechSynthesisUtterance(reply);
+      speech.lang = "en-US";
+      speech.rate = 1.1;
+      window.speechSynthesis.speak(speech);
+    }
+
+    // 🎙 Voice-to-Text
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+
+      micBtn.addEventListener("click", () => {
+        recognition.start();
+        micBtn.innerText = "🎙 Listening...";
+      });
+
+      recognition.onresult = (e) => {
+        const text = e.results[0][0].transcript;
+        messageInput.value = text;
+        micBtn.innerText = "🎤 Speak";
+        sendMessage();
+      };
+
+      recognition.onend = () => {
+        micBtn.innerText = "🎤 Speak";
+      };
+    } else {
+      micBtn.disabled = true;
+      micBtn.innerText = "❌ Mic not supported";
+    }
+  </sc
