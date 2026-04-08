@@ -8,8 +8,8 @@ import json
 import psycopg2
 from psycopg2.extras import Json
 from datetime import datetime
-from bot.conversation_logic import ConversationSession
-from bot.data_loader import load_unit, list_available_units
+from conversation_logic import ConversationSession
+from data_loader import load_unit, list_available_units
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
