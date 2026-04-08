@@ -1,5 +1,5 @@
-from bot.data_loader import load_unit
-from bot.evaluator import evaluate_answer, get_encouraging_message
+from data_loader import load_unit
+from evaluator import evaluate_answer, get_encouraging_message
 import random
 
 class ConversationSession:
