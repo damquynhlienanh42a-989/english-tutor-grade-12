@@ -3,52 +3,64 @@ import google.generativeai as genai
 import json
 import re
 
-# Cấu hình AI
+# Cấu hình AI Gemini
 genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 def evaluate_answer(student_answer, expected_answer):
     if not expected_answer:
-        return {'feedback': "", 'is_correct': True, 'similarity': 1.0}
+        return {'feedback': "Tốt lắm!", 'is_correct': True, 'score': 10}
 
-    # Lời nhắc (Prompt) gửi cho Gemini - Ép AI không nói luyên thuyên
+    # Lời nhắc (Prompt) cực kỳ chi tiết để AI soi lỗi ngữ pháp lớp 10
     prompt = f"""
-    Bạn là một giáo viên tiếng Anh thực tế, KHÔNG nói luyên thuyên.
+    Bạn là một giáo viên tiếng Anh chuyên nghiệp đang chấm bài cho học sinh lớp 10.
+    Hãy soi lỗi cực kỳ kỹ lưỡng và chấm điểm khắt khe.
+
+    Câu hỏi yêu cầu ý chính: "{expected_answer}"
     Học sinh trả lời: "{student_answer}"
-    Đáp án mẫu: "{expected_answer}"
 
-    Nhiệm vụ:
-    1. Chỉ nhận xét dựa trên những gì học sinh đã viết. TUYỆT ĐỐI không tự vẽ thêm các tình tiết khác.
-    2. Nếu câu đúng: Khen ngắn gọn bằng tiếng Việt.
-    3. Nếu câu sai: Sửa lỗi ngữ pháp (Better Answer) sao cho giữ nguyên ý của học sinh nhất có thể.
-    4. Trả lời bằng tiếng Việt ở phần giải thích để học sinh dễ hiểu.
+    Nhiệm vụ của bạn:
+    1. SOI LỖI NGỮ PHÁP (BẮT BUỘC): Kiểm tra chia động từ (số ít/số nhiều), thì của động từ, mạo từ (a/an/the), danh từ số nhiều, và lỗi viết hoa/dấu câu.
+    2. CHẤM ĐIỂM (Thang 10): 
+       - 10: Đúng hoàn toàn, không sai dù chỉ 1 dấu phẩy.
+       - 8-9: Đúng ý nhưng sai 1 lỗi ngữ pháp nhỏ (ví dụ: thiếu 's', quên viết hoa).
+       - 5-7: Sai cấu trúc câu hoặc sai nhiều lỗi chính tả nhưng vẫn hiểu được ý.
+       - Dưới 5: Sai hoàn toàn ngữ pháp hoặc trả lời lạc đề.
+    3. PHẢN HỒI (Tiếng Việt):
+       - Phải chỉ rõ em đã sai ở đâu (Ví dụ: "Em quên chia động từ 'like' thành 'likes'").
+       - Đưa ra "Better Answer" là câu sửa lại hoàn chỉnh, tự nhiên.
 
-    Trả về JSON theo định dạng:
+    Trả về JSON định dạng sau:
     {{
-        "is_correct": true hoặc false,
-        "feedback": "Lời nhận xét tiếng Việt + Better Answer: [Câu sửa lỗi sát ý]"
+        "score": số_điểm,
+        "feedback": "Nhận xét tiếng Việt cụ thể lỗi sai. Better Answer: [Câu sửa lại chuẩn]"
     }}
     """
 
     try:
         response = model.generate_content(prompt)
-        content = response.text
-        json_match = re.search(r'\{.*\}', content, re.DOTALL)
+        # Lọc lấy phần JSON trong phản hồi của AI
+        json_match = re.search(r'\{.*\}', response.text, re.DOTALL)
         result = json.loads(json_match.group())
         
         return {
-            'feedback': result.get('feedback', 'Good job! Keep it up.'),
-            'is_correct': result.get('is_correct', True),
-            'similarity': 1.0 if result.get('is_correct') else 0.5
+            'feedback': result.get('feedback', 'Keep it up!'),
+            'score': result.get('score', 0),
+            'is_correct': result.get('score', 0) >= 5
         }
     except Exception as e:
+        # Trường hợp lỗi, trả về điểm trung bình
         return {
-            'feedback': "Good try! Let's continue.",
-            'is_correct': True,
-            'similarity': 0.8
+            'feedback': "Cố gắng lên em nhé! Hãy chú ý ngữ pháp hơn.",
+            'score': 5.0,
+            'is_correct': True
         }
 
 def get_encouraging_message():
     import random
-    messages = ["Keep it up! 🌟", "Great work! 💪", "Excellent effort! 🎉"]
+    messages = [
+        "Làm tốt lắm, cố gắng phát huy nhé! 🌟",
+        "Cô tin em có thể làm tốt hơn ở câu sau! 💪",
+        "Sửa lại một chút lỗi nhỏ là hoàn hảo rồi! 🎉"
+    ]
     return random.choice(messages)
