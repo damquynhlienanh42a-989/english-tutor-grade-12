@@ -3,1073 +3,134 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎧 English Speaking Practice</title>
+  <title>🎧 English Speaking Practice - Grade 10</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { color: white; text-align: center; margin-bottom: 30px; font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+    .student-section { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin-bottom: 25px; }
+    #chat { background: #f8f9fa; padding: 20px; border-radius: 15px; height: 400px; overflow-y: auto; margin-bottom: 20px; border: 2px solid #dee2e6; }
     
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      padding: 20px;
-    }
-    
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    
-    h1 {
-      color: white;
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 2.5em;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
-    
-    .teacher-panel {
-      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-      padding: 25px;
-      border-radius: 20px;
-      margin-bottom: 25px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    }
-    
-    .teacher-panel h3 {
-      color: #c0392b;
-      margin-bottom: 15px;
-      font-size: 1.4em;
-    }
-    
-    .teacher-panel p {
-      color: #555;
-      margin-bottom: 10px;
-    }
-    
-    #questionList {
-      width: 100%;
-      height: 150px;
-      padding: 15px;
-      border: 2px solid #e67e22;
-      border-radius: 12px;
-      margin: 10px 0;
-      font-size: 15px;
-      resize: vertical;
-      background: white;
-    }
-    
-    .student-section {
-      background: white;
-      padding: 25px;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    }
-    
-    .student-section h3 {
-      color: #667eea;
-      margin-bottom: 20px;
-      font-size: 1.5em;
-    }
-    
-    #chat {
-      background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
-      padding: 20px;
-      border-radius: 15px;
-      height: 400px;
-      overflow-y: auto;
-      margin-bottom: 20px;
-      border: 2px solid #dee2e6;
-    }
-    
-    #chat p {
-      margin: 10px 0;
-      padding: 12px 18px;
-      border-radius: 12px;
-      line-height: 1.6;
-      animation: fadeIn 0.3s ease-in;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    #chat p b {
-      display: block;
-      margin-bottom: 5px;
-      font-size: 0.9em;
-    }
-    
-    .controls {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-    }
-    
-    input {
-      flex: 1;
-      min-width: 200px;
-      padding: 15px;
-      border-radius: 25px;
-      border: 2px solid #dee2e6;
-      font-size: 16px;
-      transition: border 0.3s;
-    }
-    
-    input:focus {
-      outline: none;
-      border: 2px solid #667eea;
-    }
-    
-    button {
-      padding: 15px 25px;
-      border-radius: 25px;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 15px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-    }
-    
-    button:active {
-      transform: translateY(0);
-    }
-    
-    .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-    
-    .btn-success {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      color: white;
-    }
-    
-    .btn-mic {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      color: white;
-    }
-    
-    .btn-start {
-      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-      color: white;
-      font-size: 16px;
-    }
-    
-    .btn-secondary {
-      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-      color: white;
-    }
-    
-    .success {
-      color: #27ae60;
-      font-weight: bold;
-      margin-left: 10px;
-      animation: fadeIn 0.5s;
-    }
-    
-    .button-group {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 1.8em;
-      }
-      
-      .controls {
-        flex-direction: column;
-      }
-      
-      input {
-        width: 100%;
-      }
-    }
-    /* ====== Student Info Modal ====== */
-    .modal-overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(4px);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-overlay.show { display: flex; }
+    /* Style cho vòng tròn điểm số */
+    #score-panel { display: none; background: #fff; border: 2px solid #667eea; border-radius: 15px; padding: 15px; margin-bottom: 15px; animation: fadeIn 0.5s; }
+    .score-flex { display: flex; align-items: center; gap: 20px; }
+    #score-circle { width: 70px; height: 70px; border-radius: 50%; background: #4e73df; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+    #feedback-text { flex: 1; color: #333; font-size: 1rem; line-height: 1.5; }
 
-    .modal-box {
-      background: white;
-      border-radius: 24px;
-      padding: 36px 32px 28px;
-      width: 92%;
-      max-width: 420px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      animation: popIn .25s ease;
-    }
-    @keyframes popIn {
-      from { transform: scale(.85); opacity: 0; }
-      to   { transform: scale(1);   opacity: 1; }
-    }
-
-    .modal-box h2 {
-      color: #667eea;
-      font-size: 1.4em;
-      margin-bottom: 6px;
-      text-align: center;
-    }
-    .modal-box .modal-sub {
-      color: #888; font-size: .88em; text-align: center; margin-bottom: 22px;
-    }
-
-    .modal-field { margin-bottom: 16px; }
-    .modal-field label {
-      display: block; font-weight: 600; color: #444;
-      margin-bottom: 6px; font-size: .93em;
-    }
-    .modal-field input, .modal-field select {
-      width: 100%; padding: 11px 14px;
-      border: 2px solid #e0e0e0; border-radius: 12px;
-      font-size: 1em; outline: none;
-      transition: border-color .2s;
-    }
-    .modal-field input:focus, .modal-field select:focus { border-color: #667eea; }
-
-    .modal-btn {
-      width: 100%; padding: 13px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white; border: none; border-radius: 14px;
-      font-size: 1.05em; font-weight: bold; cursor: pointer;
-      margin-top: 6px; transition: opacity .2s;
-    }
-    .modal-btn:hover { opacity: .9; }
-    .modal-btn:disabled { opacity: .6; cursor: not-allowed; }
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; }
+    input { flex: 1; min-width: 200px; padding: 15px; border-radius: 25px; border: 2px solid #dee2e6; font-size: 16px; }
+    button { padding: 12px 25px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    .btn-primary { background: #667eea; color: white; }
+    .btn-mic { background: #4facfe; color: white; }
+    .btn-unit { background: #43e97b; color: white; margin: 5px; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
 
-  <!-- Student Info Modal -->
-  <div class="modal-overlay" id="studentModal">
-    <div class="modal-box">
-      <h2>🎤 Bắt đầu luyện tập</h2>
-      <p class="modal-sub">Nhập thông tin để bắt đầu</p>
-
-      <div class="modal-field">
-        <label>👤 Họ và tên</label>
-        <input type="text" id="modalName" placeholder="Ví dụ: Nguyễn Văn An" autocomplete="name" />
-      </div>
-      <div class="modal-field">
-        <label>🏫 Lớp</label>
-        <input type="text" id="modalClass" placeholder="Ví dụ: 10A1, 11B2..." />
-      </div>
-
-      <button class="modal-btn" id="modalStartBtn" onclick="confirmStudentInfo()">
-        🚀 Bắt đầu ngay!
-      </button>
-    </div>
-  </div>
   <div class="container">
-    <h1>🎧 English Speaking Practice</h1>
+    <h1>🎧 English Practice - Grade 10</h1>
 
-    <!-- LIVE STATS BAR -->
-    <div id="statsBar" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;">
-      <div style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);border-radius:14px;padding:12px 22px;color:white;text-align:center;min-width:120px;">
-        <div style="font-size:1.6em;font-weight:bold;" id="statTotalSessions">—</div>
-        <div style="font-size:0.78em;opacity:0.85;margin-top:2px;">📝 Lượt luyện tập</div>
-      </div>
-      <div style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);border-radius:14px;padding:12px 22px;color:white;text-align:center;min-width:120px;">
-        <div style="font-size:1.6em;font-weight:bold;" id="statTotalStudents">—</div>
-        <div style="font-size:0.78em;opacity:0.85;margin-top:2px;">👨‍🎓 Học sinh</div>
-      </div>
-      <div style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);border-radius:14px;padding:12px 22px;color:white;text-align:center;min-width:120px;">
-        <div style="font-size:1.6em;font-weight:bold;" id="statAvgScore">—</div>
-        <div style="font-size:0.78em;opacity:0.85;margin-top:2px;">⭐ Điểm trung bình</div>
-      </div>
-      <div style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);border-radius:14px;padding:12px 22px;color:white;text-align:center;min-width:120px;">
-        <div style="font-size:1.6em;font-weight:bold;" id="statUnits">—</div>
-        <div style="font-size:0.78em;opacity:0.85;margin-top:2px;">📚 Unit đã luyện</div>
-      </div>
-    </div>
-
-    <div style="text-align: center; margin-bottom: 20px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-      <button onclick="toggleMyResults()" id="myResultsBtn" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 12px 24px; border-radius: 25px; border: none; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.2); cursor: pointer; font-size: 15px;">
-        📊 My Results
-      </button>
-    </div>
-
-    <!-- MY RESULTS PANEL (student-only, hidden by default) -->
-    <div id="myResultsPanel" style="display: none; background: white; border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
-      <h3 id="myResultsTitle" style="color: #667eea; margin-bottom: 15px; text-align: center;">📊 My Results</h3>
-      <div id="myResultsContent">
-        <p style="text-align: center; color: #999;">Start a unit first to see your results here!</p>
-      </div>
-    </div>
-    
-    <!-- IMPORTANT NOTICE FOR VOICE FEATURES -->
-    <div style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-      <h3 style="margin: 0 0 10px 0;">🎤🔊 To Use Voice Features: Open in New Tab!</h3>
-      <p style="margin: 10px 0;">The microphone and speaker won't work in the preview window. Click the button below to open the app in a new tab where all voice features will work perfectly!</p>
-      <button onclick="window.open(window.location.href, '_blank')" style="background: white; color: #ff6b6b; padding: 15px 30px; border-radius: 25px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-        🚀 Open App in New Tab
-      </button>
-    </div>
-    
-    <!-- SPEAKER INSTRUCTIONS -->
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-      <h3 style="margin: 0 0 10px 0;">🔊 How to Enable the Speaker (Hear the Chatbot)</h3>
-      <div style="text-align: left; padding: 0 20px;">
-        <p style="margin: 10px 0;"><strong>Step 1:</strong> Click the "🚀 Open App in New Tab" button above</p>
-        <p style="margin: 10px 0;"><strong>Step 2:</strong> In the new tab, click anywhere on the page (the background, a button, etc.)</p>
-        <p style="margin: 10px 0;"><strong>Step 3:</strong> Make sure your device volume is turned up 🔊</p>
-        <p style="margin: 10px 0;"><strong>Step 4:</strong> Choose a unit from the "📚 Choose Your Conversation Unit" section and you'll hear the chatbot speak!</p>
-        <p style="margin: 15px 0 5px 0; font-size: 14px; opacity: 0.9;">💡 <em>If you still can't hear: Check if your browser has sound enabled in the address bar. Look for a 🔇 mute icon and click it to unmute.</em></p>
-      </div>
-    </div>
-    
-    <!-- TEACHER PANEL -->
-    <div class="teacher-panel">
-      <h3>👨‍🏫 Teacher: Manage Speaking Questions</h3>
-      <p>Enter your questions (one per line):</p>
-      <textarea id="questionList" placeholder="What is your favourite charity?&#10;When was it set up?&#10;What is its aim?"></textarea>
-      <div class="button-group">
-        <button class="btn-success" onclick="saveQuestions()">💾 Save Questions</button>
-        <button class="btn-secondary" onclick="loadQuestions()">🔄 Load Current Questions</button>
-        <span id="saveStatus" class="success"></span>
-      </div>
-    </div>
-
-    <!-- UNIT SELECTION -->
-    <div class="student-section" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 25px; border-radius: 20px; margin-bottom: 20px;">
-      <h3 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">📚 Choose Your Conversation Unit</h3>
-      <div id="unitButtons" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-        <!-- Unit buttons will be loaded here -->
-      </div>
-    </div>
-
-    <!-- STUDENT CHAT -->
     <div class="student-section">
-      <h3 id="chatTitle">💬 Student Chat</h3>
-      
-      <!-- Voice Features Help Notice -->
-      <div style="background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%); padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #ffc107;">
-        <strong>🎤 Microphone Instructions:</strong>
-        <p style="margin: 5px 0 0 0; color: #856404;">
-          When you click "🎤 Speak", your browser will ask for permission to use your microphone. 
-          <strong>Please click "Allow"</strong> to enable voice input. If you accidentally blocked it, 
-          click the 🔒 lock icon in the address bar and change microphone to "Allow".
-        </p>
-        <hr style="margin: 10px 0; border: none; border-top: 1px solid #ffc107;">
-        <strong>🔊 Speaker Instructions (To Hear the Chatbot):</strong>
-        <p style="margin: 5px 0 0 0; color: #856404;">
-          To hear the chatbot speak: <strong>1)</strong> Open the app in a new tab (red button above), 
-          <strong>2)</strong> Click anywhere on the page once, <strong>3)</strong> Turn up your volume 🔊, 
-          <strong>4)</strong> Choose a unit above and the chatbot will speak questions and feedback out loud.
-        </p>
-      </div>
-      
+      <h3 style="text-align: center; margin-bottom: 15px;">📚 Choose Your Unit</h3>
+      <div id="unitButtons" style="text-align: center;"></div>
+    </div>
+
+    <div class="student-section">
+      <h3 id="chatTitle">💬 Chat với cô giáo AI</h3>
       <div id="chat"></div>
-      
+
+      <div id="score-panel">
+        <div class="score-flex">
+          <div id="score-circle">0</div>
+          <div id="feedback-text">Đang chờ nhận xét...</div>
+        </div>
+      </div>
+
       <div class="controls">
         <input id="message" placeholder="Type your answer here...">
         <button class="btn-primary" onclick="sendMessage()">Send</button>
-        <button class="btn-mic" id="mic">🎤 Speak</button>
-      </div>
-      
-      <div style="display: flex; gap: 10px; margin-top: 10px;">
-        <button onclick="testSpeaker()" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); font-size: 16px;">
-          🔊 Test Speaker
-        </button>
-      </div>
-      <div style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border: 2px solid #28a745; border-radius: 12px; padding: 15px; margin-top: 15px; text-align: center;">
-        <p style="color: #155724; font-weight: bold; font-size: 16px; margin: 0;">⬆️ To start practicing, please choose a unit from the <strong>"Choose Your Conversation Unit"</strong> section above!</p>
+        <button id="mic" class="btn-mic">🎤 Speak</button>
       </div>
     </div>
   </div>
 
   <script>
     const chat = document.getElementById("chat");
-    const micBtn = document.getElementById("mic");
     const messageInput = document.getElementById("message");
-    let currentQuestionIndex = 0;
-    let activityMode = false;
-    let currentQuestion = "";
-    let qaHistory = [];
-    let waitingForAnswer = false; // Track if we're waiting for student to answer
-    let speechEnabled = false; // Track if speech has been initialized
-    let selectedVoice = null; // Store the selected American English voice
-    let unitMode = false; // Track if in unit conversation mode
-    let currentUnitNumber = null; // Track current unit
-    
-    // Load and select the best American English voice
-    function loadAmericanVoice() {
-      const voices = window.speechSynthesis.getVoices();
-      if (!voices.length) return;
+    let currentUnit = null;
 
-      // Priority list: Natural AI voices first, then standard voices
-      // Match by name substring — fix: name match only (not lang fallback)
-      const voicePriority = [
-        'Microsoft Aria Online (Natural)',   // Edge/Windows — best female natural
-        'Microsoft Jenny Online (Natural)',  // Edge/Windows — natural female
-        'Microsoft Guy Online (Natural)',    // Edge/Windows — natural male
-        'Microsoft Eric Online (Natural)',   // Edge/Windows — natural male
-        'Microsoft Brian Online (Natural)',  // Edge/Windows — natural male
-        'Microsoft Ana Online (Natural)',    // Edge/Windows — natural female
-        'Google US English',                // Chrome Android — good quality
-        'Samantha',                         // macOS/iOS — premium
-        'Alex',                             // macOS — clear
-        'Microsoft David Desktop',          // Windows offline fallback
-        'Microsoft Mark Desktop',           // Windows offline fallback
-        'Microsoft David',                  // Windows any
-        'Microsoft Mark',                   // Windows any
-      ];
-
-      for (const preferredName of voicePriority) {
-        const voice = voices.find(v =>
-          v.name.includes(preferredName) && v.lang.startsWith('en-US')
-        );
-        if (voice) {
-          selectedVoice = voice;
-          console.log('Selected voice:', voice.name);
-          return;
-        }
-      }
-
-      // Final fallback: any en-US voice
-      selectedVoice = voices.find(v => v.lang === 'en-US' || v.lang.startsWith('en-US'));
-      if (selectedVoice) console.log('Using voice:', selectedVoice.name);
-    }
-    
-    // Speak function — returns a Promise that resolves when speech finishes (or times out)
-    function speak(text, rate = 1.0) {
-      return new Promise((resolve) => {
-        try {
-          window.speechSynthesis.cancel();
-
-          if (!selectedVoice) loadAmericanVoice();
-
-          const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = "en-US";
-          utterance.rate = rate * 0.95;   // slightly slower = clearer, more natural
-          utterance.pitch = 1.0;
-          utterance.volume = 1.0;
-          if (selectedVoice) utterance.voice = selectedVoice;
-
-          // Estimate how long speech should take (80ms per character, min 2s)
-          const estimatedMs = Math.max(2000, text.length * 80);
-          let resolved = false;
-
-          function done() {
-            if (!resolved) {
-              resolved = true;
-              resolve();
-            }
-          }
-
-          utterance.onend = done;
-          utterance.onerror = (e) => { console.warn('Speech error:', e.error); done(); };
-
-          // Fallback: resolve after estimated duration so flow never hangs
-          const fallback = setTimeout(done, estimatedMs + 1000);
-          utterance.onend = () => { clearTimeout(fallback); done(); };
-
-          // Resume if synthesis was paused (common on mobile)
-          if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-
-          window.speechSynthesis.speak(utterance);
-
-        } catch (err) {
-          console.error('speak() error:', err);
-          resolve();
-        }
-      });
-    }
-
-    // Fix Chrome bug: speech synthesis stops after ~15s — keep it alive
-    setInterval(() => {
-      if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.pause();
-        window.speechSynthesis.resume();
-      }
-    }, 10000);
-    
-    // Test speaker function
-    function testSpeaker() {
-      try {
-        window.speechSynthesis.cancel();
-        if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-      } catch(e) {}
-      speak("Hello! If you can hear this, the speaker is working perfectly! Great job!");
-    }
-
-    // Initialize voices when page loads
-    window.speechSynthesis.onvoiceschanged = () => {
-      loadAmericanVoice();
-    };
-    
-    // Load voices immediately if already available
-    if (window.speechSynthesis.getVoices().length > 0) {
-      loadAmericanVoice();
-    }
-    
-    // Toggle / load personal results panel
-    async function toggleMyResults() {
-      const panel = document.getElementById("myResultsPanel");
-      if (panel.style.display !== "none") {
-        panel.style.display = "none";
-        return;
-      }
-      panel.style.display = "block";
-      await loadMyResults();
-      panel.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    async function loadMyResults() {
-      const contentDiv = document.getElementById("myResultsContent");
-      const titleEl = document.getElementById("myResultsTitle");
-      contentDiv.innerHTML = `<p style="text-align:center;color:#999;">Loading...</p>`;
-
-      try {
-        const res = await fetch("/api/my-results");
-        const data = await res.json();
-
-        if (!data.student_name) {
-          contentDiv.innerHTML = `<p style="text-align:center;color:#999;">Please start a unit and enter your name first!</p>`;
-          return;
-        }
-
-        titleEl.textContent = `📊 My Results — ${data.student_name}`;
-
-        if (data.results.length === 0) {
-          contentDiv.innerHTML = `<p style="text-align:center;color:#999;">No completed units yet. Finish a unit to see your results here!</p>`;
-          return;
-        }
-
-        const totalUnits = data.results.length;
-        const avgScore = (data.results.reduce((s, r) => s + r.score_percentage, 0) / totalUnits).toFixed(1);
-
-        let html = `
-          <div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;">
-            <div style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:15px 25px;border-radius:15px;text-align:center;">
-              <div style="font-size:2em;font-weight:bold;">${totalUnits}</div>
-              <div style="font-size:0.9em;">Units Completed</div>
-            </div>
-            <div style="background:linear-gradient(135deg,#43e97b,#38f9d7);color:white;padding:15px 25px;border-radius:15px;text-align:center;">
-              <div style="font-size:2em;font-weight:bold;">${avgScore}%</div>
-              <div style="font-size:0.9em;">Average Score</div>
-            </div>
-          </div>
-          <table style="width:100%;border-collapse:collapse;font-size:15px;">
-            <thead>
-              <tr style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;">
-                <th style="padding:12px;border-radius:8px 0 0 0;text-align:left;">Unit</th>
-                <th style="padding:12px;text-align:left;">Title</th>
-                <th style="padding:12px;text-align:center;">Score</th>
-                <th style="padding:12px;border-radius:0 8px 0 0;text-align:right;">Completed</th>
-              </tr>
-            </thead>
-            <tbody>`;
-
-        data.results.forEach((r, i) => {
-          const bg = i % 2 === 0 ? "#f8f9fa" : "white";
-          const scoreColor = r.score_percentage >= 80 ? "#27ae60" : r.score_percentage >= 60 ? "#e67e22" : "#e74c3c";
-          html += `
-            <tr style="background:${bg};">
-              <td style="padding:12px;font-weight:bold;color:#667eea;">Unit ${r.unit_number}</td>
-              <td style="padding:12px;">${r.unit_title}</td>
-              <td style="padding:12px;text-align:center;font-weight:bold;color:${scoreColor};">${r.score_percentage}%</td>
-              <td style="padding:12px;text-align:right;color:#888;font-size:13px;">${r.completed_at}</td>
-            </tr>`;
-        });
-
-        html += `</tbody></table>`;
-        contentDiv.innerHTML = html;
-      } catch (e) {
-        contentDiv.innerHTML = `<p style="text-align:center;color:#e74c3c;">Could not load results. Please try again.</p>`;
-      }
-    }
-
-    // Load units and create buttons
-    async function loadUnitButtons() {
+    // Load danh sách Unit
+    async function loadUnits() {
       const res = await fetch("/units/list");
       const data = await res.json();
       const container = document.getElementById("unitButtons");
-      
-      container.innerHTML = '';
-      
-      data.units.forEach(unit => {
-        const button = document.createElement('button');
-        const isCoachE = unit.unit === 11;
-
-        if (isCoachE) {
-          // Special Coach E button for Unit 11
-          button.style.cssText = `
-            background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
-            color: #1a1a1a;
-            border: none;
-            border-radius: 16px;
-            padding: 18px 15px;
-            font-size: 15px;
-            font-weight: bold;
-            line-height: 1.5;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(247,151,30,0.45);
-            transition: transform 0.2s, box-shadow 0.2s;
-            grid-column: 1 / -1;
-            width: 100%;
-          `;
-          button.innerHTML = `🚀 Unit 11: Becoming Independent<br><small style="font-weight:normal;font-size:13px;">✨ Coach E – Life Skills for Future Leaders</small>`;
-          button.onmouseover = () => { button.style.transform = 'translateY(-3px)'; button.style.boxShadow = '0 10px 28px rgba(247,151,30,0.55)'; };
-          button.onmouseout  = () => { button.style.transform = ''; button.style.boxShadow = '0 6px 20px rgba(247,151,30,0.45)'; };
-        } else {
-          button.className = 'btn-start';
-          button.innerHTML = `📖 Unit ${unit.unit}<br><small>${unit.title}</small>`;
-          button.style.padding = '15px';
-          button.style.fontSize = '16px';
-          button.style.lineHeight = '1.5';
-        }
-
-        button.onclick = () => startUnitConversation(unit.unit);
-        container.appendChild(button);
+      data.units.forEach(u => {
+        const btn = document.createElement("button");
+        btn.className = "btn-unit";
+        btn.innerHTML = `Unit ${u.unit}: ${u.title}`;
+        btn.onclick = () => startUnit(u.unit);
+        container.appendChild(btn);
       });
     }
-    
-    // Start unit conversation
-    let _pendingUnitNumber = null;
 
-    function startUnitConversation(unitNumber) {
-      // Unlock speech synthesis immediately during this user gesture (BEFORE any async)
-      try {
-        window.speechSynthesis.cancel();
-        if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-        const unlock = new SpeechSynthesisUtterance(" ");
-        unlock.volume = 0;
-        window.speechSynthesis.speak(unlock);
-      } catch(e) {}
-
-      // Show modal instead of prompt()
-      _pendingUnitNumber = unitNumber;
-      document.getElementById('modalName').value = '';
-      document.getElementById('modalClass').value = '';
-      document.getElementById('studentModal').classList.add('show');
-      setTimeout(() => document.getElementById('modalName').focus(), 100);
-
-      // Allow Enter key to submit
-      document.getElementById('modalName').onkeydown = (e) => { if (e.key === 'Enter') document.getElementById('modalClass').focus(); };
-      document.getElementById('modalClass').onkeydown = (e) => { if (e.key === 'Enter') confirmStudentInfo(); };
-    }
-
-    async function confirmStudentInfo() {
-      const studentName = document.getElementById('modalName').value.trim();
-      const studentClass = document.getElementById('modalClass').value.trim();
-
-      if (!studentName) {
-        document.getElementById('modalName').style.borderColor = '#e74c3c';
-        document.getElementById('modalName').focus();
-        return;
-      }
-      document.getElementById('modalName').style.borderColor = '';
-
-      // Close modal
-      document.getElementById('studentModal').classList.remove('show');
-
-      const unitNumber = _pendingUnitNumber;
-      currentUnitNumber = unitNumber;
-      unitMode = true;
-      activityMode = false;
-
-      chat.innerHTML = `<p style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 10px; text-align: center;'><b>⏳ Loading Unit ${unitNumber}...</b></p>`;
-
+    async function startUnit(unitNum) {
+      currentUnit = unitNum;
+      chat.innerHTML = `<p style="text-align:center;"><b>⏳ Đang tải Unit ${unitNum}...</b></p>`;
       const res = await fetch("/units/start", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          unit: unitNumber,
-          student_name: studentName,
-          student_class: studentClass
-        })
+        body: JSON.stringify({unit: unitNum, student_name: "Học sinh lớp 10"})
       });
-      
       const data = await res.json();
-      
-      // Unit 11 displays as "Unit 9" in content (textbook reference)
-      const displayTitle = unitNumber === 11 ? data.title : `Unit ${data.unit}: ${data.title}`;
-      document.getElementById("chatTitle").textContent = `💬 ${displayTitle}`;
-      const classTag = studentClass ? ` · Lớp ${studentClass}` : '';
-      chat.innerHTML = `<p style='background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 15px; border-radius: 10px; text-align: center;'><b>🎯 Hello ${studentName}${classTag}!</b><br>${displayTitle}<br>Let's practice! 🍀</p>`;
-
-      // Special Coach E activation banner for Unit 11 (Unit 9 in textbook)
-      if (unitNumber === 11) {
-        chat.innerHTML += `<div style="background:linear-gradient(135deg,#f7971e,#ffd200);border-radius:14px;padding:14px 20px;margin:10px 0;color:#1a1a1a;text-align:center;font-weight:bold;font-size:15px;">
-          🌟 <span>Coach E Mode Activated</span> 🌟<br>
-          <span style="font-weight:normal;font-size:13px;">Empowering · Wise · Energetic — 6-Step Independence Challenge</span>
-        </div>`;
-        chat.scrollTop = chat.scrollHeight;
-      }
-
-      if (data.question) {
-        const botLabel = unitNumber === 11 ? '🎤 Coach E:' : '🤖 Bot:';
-        const botBg = unitNumber === 11 ? 'background:#fff8e1; border-left:4px solid #f7971e;' : 'background:#e3f2fd; border-left:4px solid #2196f3;';
-        chat.innerHTML += `<p style='${botBg}'><b>${botLabel}</b> ${data.question}</p>`;
-        chat.scrollTop = chat.scrollHeight;
-        await speak(data.question);
-      }
+      chat.innerHTML = `<p><b>🤖 Bot:</b> ${data.question}</p>`;
+      speak(data.question);
     }
-    
-    // Send message in unit mode — waits for feedback speech to finish before next question
-    async function sendUnitMessage(message) {
+
+    async function sendMessage() {
+      const msg = messageInput.value;
+      if(!msg) return;
+      
+      chat.innerHTML += `<p style="text-align:right;"><b>👤 You:</b> ${msg}</p>`;
+      messageInput.value = "";
+
       const res = await fetch("/units/answer", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({answer: message})
-      });
-
-      const data = await res.json();
-
-      // Build and show rich feedback card, then speak key points
-      if (data.score !== undefined) {
-        const score = data.score;
-        let scoreColor = '#27ae60'; let scoreBg = '#d4edda';
-        if (score < 50)      { scoreColor = '#c0392b'; scoreBg = '#fde8e8'; }
-        else if (score < 68) { scoreColor = '#e67e22'; scoreBg = '#fff3cd'; }
-        else if (score >= 80){ scoreColor = '#8e44ad'; scoreBg = '#f3e5f5'; }
-
-        const originalHtml = data.original
-          ? `<div style="margin:6px 0;padding:8px 12px;background:#f5f5f5;border-radius:6px;font-style:italic;color:#555;">
-               <span style="font-weight:bold;font-style:normal;color:#333;">📝 Câu của em:</span> "${data.original}"
-             </div>` : '';
-
-        const noError = data.grammar_errors && (
-          data.grammar_errors.toLowerCase().includes("không có lỗi") ||
-          data.grammar_errors.toLowerCase().includes("không phát hiện")
-        );
-        const grammarColor = noError ? '#27ae60' : '#e74c3c';
-        const grammarIcon  = noError ? '✅' : '⚠️';
-        const grammarHtml  = data.grammar_errors
-          ? `<div style="margin:6px 0;"><span style="color:${grammarColor};font-weight:bold;">${grammarIcon} Lỗi ngữ pháp:</span> <span style="color:${grammarColor};">${data.grammar_errors}</span></div>` : '';
-
-        const betterHtml = data.better_answer
-          ? `<div style="margin:8px 0;background:#e8f5e9;border-left:3px solid #27ae60;padding:8px 12px;border-radius:6px;">
-               <span style="font-weight:bold;color:#1a7a3c;">🖊️ Better Answer:</span>
-               <span style="font-style:italic;"> "${data.better_answer}"</span>
-             </div>` : '';
-
-        const explainHtml = data.explanation
-          ? `<div style="margin:6px 0;"><span style="color:#2980b9;font-weight:bold;">💡 Giải thích:</span> ${data.explanation}</div>` : '';
-
-        chat.innerHTML += `
-          <div style='background:#fff9c4;border-left:4px solid #fbc02d;padding:14px 18px;border-radius:12px;margin:8px 0;'>
-            <div style="margin-bottom:10px;display:flex;align-items:center;gap:10px;">
-              <b>💬 Nhận xét từ E-Mate</b>
-              <span style="background:${scoreBg};color:${scoreColor};font-weight:bold;padding:3px 12px;border-radius:20px;font-size:14px;">📊 ${score}/100</span>
-            </div>
-            ${originalHtml}${grammarHtml}${betterHtml}${explainHtml}
-          </div>`;
-        chat.scrollTop = chat.scrollHeight;
-
-      }
-
-      // Small pause after feedback before next question
-      await new Promise(r => setTimeout(r, 1200));
-
-      if (data.completed) {
-        if (data.next_question) {
-          chat.innerHTML += `<p style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 20px; border-radius: 10px;'><b>🎉 ${data.next_question}</b></p>`;
-          chat.scrollTop = chat.scrollHeight;
-          await speak(data.next_question, 1.0);
-        }
-        unitMode = false;
-        currentUnitNumber = null;
-        document.getElementById("chatTitle").textContent = "💬 Student Chat";
-        // Automatically show this student's personal results
-        const panel = document.getElementById("myResultsPanel");
-        panel.style.display = "block";
-        await loadMyResults();
-        panel.scrollIntoView({ behavior: "smooth", block: "start" });
-      } else {
-        // Show results panel immediately after main dialogue finishes (before extra questions)
-        if (data.main_completed) {
-          const panel = document.getElementById("myResultsPanel");
-          panel.style.display = "block";
-          await loadMyResults();
-          panel.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-
-        if (data.next_question) {
-          const nqLabel = currentUnitNumber === 11 ? '🎤 Coach E:' : '🤖 Bot:';
-          const nqBg = currentUnitNumber === 11 ? 'background:#fff8e1; border-left:4px solid #f7971e;' : 'background:#e3f2fd; border-left:4px solid #2196f3;';
-          chat.innerHTML += `<p style='${nqBg}'><b>${nqLabel}</b> ${data.next_question}</p>`;
-          chat.scrollTop = chat.scrollHeight;
-          await speak(data.next_question, 1.0);
-        }
-      }
-    }
-    
-    // Load questions into teacher panel
-    async function loadQuestions() {
-      const res = await fetch("/questions");
-      const data = await res.json();
-      document.getElementById("questionList").value = data.questions.join("\n");
-    }
-
-    // Save questions
-    async function saveQuestions() {
-      const text = document.getElementById("questionList").value;
-      const questions = text.split("\n").filter(q => q.trim());
-      
-      await fetch("/questions", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({questions})
-      });
-      
-      document.getElementById("saveStatus").textContent = "✅ Saved!";
-      setTimeout(() => {
-        document.getElementById("saveStatus").textContent = "";
-      }, 2000);
-    }
-
-    // Start speaking activity
-    async function startActivity() {
-      currentQuestionIndex = 0;
-      activityMode = true;
-      qaHistory = [];
-      waitingForAnswer = false;
-      chat.innerHTML = "<p style='background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 15px; border-radius: 10px; text-align: center;'><b>🎯 Speaking Activity Started!</b><br>Answer each question clearly. You must answer each question before moving to the next one. Good luck! 🍀</p>";
-      askNextQuestion();
-    }
-
-    // Ask next question
-    async function askNextQuestion() {
-      const res = await fetch("/get-question", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({index: currentQuestionIndex})
+        body: JSON.stringify({answer: msg})
       });
       const data = await res.json();
-      
-      if (data.hasMore) {
-        currentQuestion = data.question;
-        waitingForAnswer = true; // Mark that we need an answer to this question
-        chat.innerHTML += `<p style='background: #e3f2fd; border-left: 4px solid #2196f3;'><b>🤖 Bot:</b> ${currentQuestion}</p>`;
-        chat.innerHTML += `<p style='background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 10px; border-radius: 8px; text-align: center; font-size: 14px;'><b>⏳ Please answer this question before moving to the next one!</b></p>`;
-        chat.scrollTop = chat.scrollHeight;
+
+      // HIỂN THỊ ĐIỂM VÀ FEEDBACK VÀO VÒNG TRÒN
+      if(data.score !== undefined) {
+        document.getElementById("score-panel").style.display = "block";
+        const circle = document.getElementById("score-circle");
+        circle.innerText = data.score;
         
-        // Speak the question using robust speech function
-        speak(currentQuestion, 1.1);
-      } else {
-        // Activity completed - show score
-        waitingForAnswer = false;
-        chat.innerHTML += `<p style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 15px; border-radius: 10px; text-align: center;'><b>🎉 Great job! Calculating your score... ⏳</b></p>`;
-        await showScore();
-        activityMode = false;
-      }
-    }
+        // Đổi màu vòng tròn theo điểm
+        if(data.score >= 8) circle.style.background = "#27ae60";
+        else if(data.score >= 5) circle.style.background = "#f39c12";
+        else circle.style.background = "#e74c3c";
 
-    // Show score after activity
-    async function showScore() {
-      const res = await fetch("/evaluate", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({qa_pairs: qaHistory})
-      });
-      const data = await res.json();
-      const evaluation = data.evaluation || "Great effort!";
-      
-      chat.innerHTML += `<p style='background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); padding: 20px; border-radius: 10px; border: 3px solid #e67e22;'><b>📊 Your Score:</b><br>${evaluation}</p>`;
+        document.getElementById("feedback-text").innerHTML = data.feedback;
+      }
+
+      if(data.next_question) {
+        chat.innerHTML += `<p><b>🤖 Bot:</b> ${data.next_question}</p>`;
+        speak(data.next_question);
+      }
       chat.scrollTop = chat.scrollHeight;
-      
-      // Speak the evaluation using robust speech function
-      speak(evaluation, 1.0);
     }
 
-    // Send message to Flask
-    async function sendMessage() {
-      const message = messageInput.value.trim();
-      if (!message) return;
-
-      chat.innerHTML += `<p style='background: #c8e6c9; border-left: 4px solid #4caf50; text-align: right;'><b>👤 You:</b> ${message}</p>`;
-      messageInput.value = "";
-      chat.scrollTop = chat.scrollHeight;
-
-      // If in unit mode, use unit conversation
-      if (unitMode) {
-        sendUnitMessage(message);
-        return;
-      }
-
-      // Original charity questions mode
-      // Check if student is trying to respond without a proper answer (in activity mode)
-      if (activityMode && waitingForAnswer) {
-        const wordCount = message.split(/\s+/).length;
-        if (wordCount < 3) {
-          // Gentle reminder instead of blocking
-          const reminder = "I noticed your answer is quite short. Could you please give me a more complete answer with a full sentence? Take your time!";
-          chat.innerHTML += `<p style='background: #fff9c4; border-left: 4px solid #fbc02d;'><b>🤖 Bot:</b> ${reminder}</p>`;
-          chat.scrollTop = chat.scrollHeight;
-          
-          // Speak reminder using robust speech function
-          speak(reminder, 1.1);
-          return; // Don't save this as answer, wait for proper response
-        }
-        
-        // Proper answer received - save it
-        qaHistory.push({
-          question: currentQuestion,
-          answer: message
-        });
-        waitingForAnswer = false; // Answer received, can move to next question
-      }
-
-      const res = await fetch("/chat", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({message})
-      });
-      const data = await res.json();
-      const reply = data.reply || "(No reply)";
-      chat.innerHTML += `<p style='background: #fff9c4; border-left: 4px solid #fbc02d;'><b>🤖 Bot:</b> ${reply}</p>`;
-      chat.scrollTop = chat.scrollHeight;
-
-      // Bot speaks using robust speech function
-      speak(reply, 1.1);
-
-      // If in activity mode, move to next question ONLY after answer is saved
-      if (activityMode && !waitingForAnswer) {
-        currentQuestionIndex++;
-        // Increased delay from 2000ms to 4000ms to give students more time between questions
-        setTimeout(askNextQuestion, 4000);
-      }
+    function speak(text) {
+      const msg = new SpeechSynthesisUtterance(text);
+      msg.lang = 'en-US';
+      window.speechSynthesis.speak(msg);
     }
 
-    // Voice-to-Text — robust single-shot approach
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      let isListening = false;
-      let recognition = null;
-      let accumulatedTranscript = "";
-
-      function buildRecognition() {
-        const r = new SpeechRecognition();
-        r.lang = "en-US";
-        r.interimResults = true;
-        r.continuous = false;   // single-shot: more reliable across browsers
-        r.maxAlternatives = 1;
-
-        r.onresult = (e) => {
-          let interim = "";
-          let final = "";
-          for (let i = 0; i < e.results.length; i++) {
-            if (e.results[i].isFinal) {
-              final += e.results[i][0].transcript + " ";
-            } else {
-              interim += e.results[i][0].transcript;
-            }
-          }
-          if (final) accumulatedTranscript += final;
-          messageInput.value = (accumulatedTranscript + interim).trim();
-        };
-
-        r.onend = () => {
-          // If still in "listening" mode, restart recognition to keep mic active
-          if (isListening) {
-            try {
-              recognition = buildRecognition();
-              recognition.start();
-              return; // don't reset button yet
-            } catch (e) {
-              // failed to restart — fall through to reset
-            }
-          }
-          resetMicBtn();
-        };
-
-        r.onerror = (e) => {
-          if (e.error === 'no-speech') {
-            // no-speech is harmless — just restart listening
-            return;
-          }
-          isListening = false;
-          resetMicBtn();
-          if (e.error === 'not-allowed') {
-            alert("⚠️ Microphone Permission Denied!\n\n1. Click the 🔒 lock icon in the address bar\n2. Set 'Microphone' to Allow\n3. Refresh the page");
-          }
-        };
-
-        return r;
-      }
-
-      function resetMicBtn() {
-        isListening = false;
-        micBtn.innerText = "🎤 Speak";
-        micBtn.style.background = "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)";
-        micBtn.disabled = false;
-      }
-
-      function stopAndSend() {
-        if (!isListening) return;
-        isListening = false;         // mark stopped BEFORE calling stop() so onend won't restart
-        try { recognition.stop(); } catch(e) {}
-        resetMicBtn();
-        if (messageInput.value.trim()) {
-          sendMessage();
-        }
-      }
-
-      micBtn.addEventListener("click", () => {
-        if (isListening) {
-          stopAndSend();
-          return;
-        }
-        accumulatedTranscript = "";
-        messageInput.value = "";
-        isListening = true;
-        micBtn.innerText = "🛑 Stop & Send";
-        micBtn.style.background = "linear-gradient(135deg, #f5576c 0%, #f093fb 100%)";
-        try {
-          recognition = buildRecognition();
-          recognition.start();
-        } catch (err) {
-          isListening = false;
-          resetMicBtn();
-          alert("⚠️ Microphone error. Please allow mic access and try again.");
-        }
-      });
-
-    } else {
-      micBtn.disabled = true;
-      micBtn.innerText = "❌ Mic not supported";
-    }
-
-    // Load questions and units on page load
-    loadQuestions();
-    loadUnitButtons();
-
-    // Load live stats
-    async function loadStats() {
-      try {
-        const res = await fetch('/api/stats');
-        const d = await res.json();
-        document.getElementById('statTotalSessions').textContent = d.total_sessions ?? '—';
-        document.getElementById('statTotalStudents').textContent = d.total_students ?? '—';
-        document.getElementById('statAvgScore').textContent = d.avg_score ? d.avg_score.toFixed(1) : '—';
-        document.getElementById('statUnits').textContent = d.units_used ?? '—';
-      } catch(e) {}
-    }
-    loadStats();
-    // Refresh stats every 60 seconds
-    setInterval(loadStats, 60000);
+    loadUnits();
   </script>
 </body>
 </html>
