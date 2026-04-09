@@ -1,38 +1,42 @@
 {
-  "unit": 9,
-  "title": "Travel in Vietnam – Suggestions & Travel Experience",
+  "title": "Unit 9: Travel and Tourism (Lớp 10)",
   "dialogue": [
     {
-      "bot": "Hello! Welcome to Vietnam. If someone only had three days to spend here, where would you suggest they should go and what should they do?",
-      "expected": "Hello! I would suggest they go to Hanoi, the capital city. They should spend one day exploring the Old Quarter and trying street food, and another day visiting Hoan Kiem Lake and the Temple of Literature."
+      "bot": "Hi! Do you like traveling? Where do you want to go for your next vacation?",
+      "expected": "I love traveling. I want to go to Da Lat for my next vacation."
     },
     {
-      "bot": "That sounds like a great plan. Why do you recommend Hanoi over other places like Ho Chi Minh City or Ha Long Bay?",
-      "expected": "Hanoi has a lot of history and culture. It's easy to walk around, and the food experience is very unique. It offers a perfect blend of the old and the new."
+      "bot": "That's a great choice! Who do you usually go traveling with? Your family or your friends?",
+      "expected": "I usually travel with my family because it's more fun."
     },
     {
-      "bot": "Now, let's talk about your trip. Can you tell me about one memorable experience you had in Vietnam where something unexpected happened?",
-      "expected": "Yes! I had an interesting experience when I was traveling by train from Da Nang to Hue."
+      "bot": "How do you often travel to a new place? Do you prefer going by bus, train, or plane?",
+      "expected": "I prefer going by plane because it is fast and comfortable."
     },
     {
-      "bot": "What exactly happened during that trip?",
-      "expected": "The train suddenly broke down between two stations. It was late at night, and we were stuck there for about four hours waiting for an engineer to arrive."
+      "bot": "What activities do you like doing when you travel? Sightseeing, swimming, or trying local food?",
+      "expected": "I like going sightseeing and trying local food when I travel."
     },
     {
-      "bot": "Oh dear, that must have been stressful. What was the main problem, and how did you handle it?",
-      "expected": "The main problem was a faulty engine part. I handled it by trying to stay calm. I talked to the other passengers and read a book on my phone to pass the time. The train staff offered free water."
+      "bot": "Do you like buying souvenirs for your friends? What do you usually buy?",
+      "expected": "Yes, I do. I usually buy some local snacks or postcards for them."
     },
     {
-      "bot": "That shows good composure. How did you feel when the train finally started moving again?",
-      "expected": "I felt extremely relieved! I was really happy that the journey could continue, even though I arrived at Hue four hours late."
+      "bot": "Do you prefer staying in a hotel or a homestay when you are on holiday?",
+      "expected": "I prefer staying in a homestay to learn more about the local people."
     },
     {
-      "bot": "Thank you for sharing both your travel tips and that surprising story.",
-      "expected": ""
+      "bot": "What is the most important thing you should take when you travel? Your phone, money, or your map?",
+      "expected": "I think my phone is the most important thing to take."
+    },
+    {
+      "bot": "Final question: What was your favorite trip? Why did you like it so much?",
+      "expected": "My favorite trip was to Ha Long Bay because the scenery was amazing."
     }
   ],
   "extra_questions": [
-    "Which Vietnamese city would you like to visit next?",
-    "What is your favorite thing about traveling?"
+    "Do you prefer a beach holiday or a mountain holiday?",
+    "Is traveling important for learning new things?",
+    "Have you ever had any trouble while traveling?"
   ]
 }
