@@ -1,72 +1,50 @@
-import difflib
+import os
+import google.generativeai as genai
 
-def calculate_similarity(student_answer, expected_answer):
-    """
-    Calculate similarity between student answer and expected answer.
-    
-    Args:
-        student_answer (str): The student's answer
-        expected_answer (str): The expected answer
-    
-    Returns:
-        float: Similarity score (0.0 to 1.0)
-    """
-    if not expected_answer:
-        return 1.0
-    
-    student_lower = student_answer.lower().strip()
-    expected_lower = expected_answer.lower().strip()
-    
-    similarity = difflib.SequenceMatcher(None, student_lower, expected_lower).ratio()
-    return similarity
+# Cấu hình AI
+genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 def evaluate_answer(student_answer, expected_answer):
-    """
-    Evaluate the student's answer and provide feedback.
-    
-    Args:
-        student_answer (str): The student's answer
-        expected_answer (str): The expected answer
-    
-    Returns:
-        dict: Contains 'feedback', 'is_correct', 'similarity'
-    """
     if not expected_answer:
+        return {'feedback': "", 'is_correct': True, 'similarity': 1.0}
+
+    # Lời nhắc (Prompt) gửi cho Gemini
+    prompt = f"""
+    Bạn là một giáo viên tiếng Anh bản ngữ. Hãy chấm điểm câu trả lời của học sinh.
+    Câu hỏi yêu cầu đáp án tương tự như: "{expected_answer}"
+    Học sinh trả lời: "{student_answer}"
+
+    Hãy phản hồi theo định dạng JSON như sau:
+    {{
+        "is_correct": true hoặc false (chọn true nếu đúng về nghĩa, chấp nhận lỗi nhỏ),
+        "feedback": "Nhận xét ngắn gọn bằng tiếng Việt, sửa lỗi ngữ pháp nếu có, khen ngợi nếu hay."
+    }}
+    Lưu ý: Nếu câu trả lời quá ngắn, hãy nhắc học sinh viết đầy đủ câu.
+    """
+
+    try:
+        response = model.generate_content(prompt)
+        # Lấy kết quả từ AI (đoạn này em đã xử lý để nó lấy đúng JSON)
+        import json
+        import re
+        content = response.text
+        json_match = re.search(r'\{.*\}', content, re.DOTALL)
+        result = json.loads(json_match.group())
+        
         return {
-            'feedback': "",
-            'is_correct': True,
-            'similarity': 1.0
+            'feedback': result.get('feedback', 'Great job!'),
+            'is_correct': result.get('is_correct', True),
+            'similarity': 1.0 if result.get('is_correct') else 0.5
         }
-    
-    similarity = calculate_similarity(student_answer, expected_answer)
-    
-    if similarity >= 0.85:
-        feedback = "Excellent! That's a perfect answer! ✅"
-        is_correct = True
-    elif similarity >= 0.70:
-        feedback = "Great job! Your answer is very close! 👍"
-        is_correct = True
-    elif similarity >= 0.50:
-        feedback = f"Good try! You're on the right track. Here's a hint: The expected answer is similar to: '{expected_answer}'. Try again or continue!"
-        is_correct = False
-    else:
-        feedback = f"I see what you mean, but let me help you. A better answer would be: '{expected_answer}'. Would you like to try again or move on?"
-        is_correct = False
-    
-    return {
-        'feedback': feedback,
-        'is_correct': is_correct,
-        'similarity': similarity
-    }
+    except Exception as e:
+        return {
+            'feedback': "Great effort! Keep practicing.",
+            'is_correct': True,
+            'similarity': 0.8
+        }
 
 def get_encouraging_message():
-    """Get a random encouraging message."""
     import random
-    messages = [
-        "You're doing great! Keep going! 🌟",
-        "Wonderful progress! 💪",
-        "Fantastic effort! 🎉",
-        "You're improving with each answer! ⭐",
-        "Great work! Keep it up! 🚀"
-    ]
+    messages = ["Keep it up! 🌟", "Great work! 💪", "Excellent effort! 🎉"]
     return random.choice(messages)
