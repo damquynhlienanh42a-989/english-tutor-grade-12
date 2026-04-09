@@ -6,180 +6,186 @@
   <title>🎧 English Speaking Practice - Grade 10</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
-    .container { max-width: 900px; margin: 0 auto; }
-    h1 { color: white; text-align: center; margin-bottom: 30px; font-size: 2.2em; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 10px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { color: white; text-align: center; margin: 20px 0; font-size: 1.8em; }
+    .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin-bottom: 20px; }
+    #chat { background: #f8f9fa; padding: 15px; border-radius: 15px; height: 350px; overflow-y: auto; border: 1px solid #ddd; margin-bottom: 15px; }
+    .bot-msg { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 10px; border-radius: 8px; margin: 10px 0; }
+    .user-msg { background: #c8e6c9; border-right: 4px solid #4caf50; padding: 10px; border-radius: 8px; margin: 10px 0; text-align: right; }
     
-    .student-section { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin-bottom: 25px; }
-    #chat { background: #f8f9fa; padding: 20px; border-radius: 15px; height: 350px; overflow-y: auto; margin-bottom: 20px; border: 2px solid #dee2e6; }
+    .feedback-box { background: #fffde7; border: 1px dashed #fbc02d; padding: 12px; border-radius: 12px; margin: 10px 0; display: flex; align-items: center; gap: 15px; animation: fadeIn 0.5s; }
+    .score-circle { width: 50px; height: 50px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; font-size: 1.1em; }
     
-    /* VÒNG TRÒN ĐIỂM SỐ */
-    #score-panel { display: none; background: #fff9c4; border-left: 5px solid #fbc02d; padding: 15px; border-radius: 15px; margin-bottom: 15px; animation: fadeIn 0.5s; }
-    .score-flex { display: flex; align-items: center; gap: 20px; }
-    #score-circle { width: 65px; height: 65px; border-radius: 50%; background: #4e73df; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.6rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0; }
-    #feedback-text { flex: 1; color: #333; font-size: 0.95rem; line-height: 1.5; }
+    .controls { display: flex; gap: 8px; }
+    input { flex: 1; padding: 12px; border-radius: 25px; border: 1px solid #ddd; outline: none; }
+    button { padding: 10px 20px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; color: white; transition: 0.3s; }
+    .btn-send { background: #667eea; }
+    .btn-mic { background: #4facfe; }
+    .btn-unit { background: #43e97b; color: white; margin: 5px; padding: 10px; font-size: 0.85em; }
 
-    /* MODAL HỎI TÊN */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; }
-    .modal-overlay.show { display: flex; }
-    .modal-box { background: white; border-radius: 24px; padding: 30px; width: 90%; max-width: 400px; text-align: center; }
-    .modal-field { margin: 15px 0; text-align: left; }
-    .modal-field input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 12px; font-size: 1rem; outline: none; }
-    .modal-field input:focus { border-color: #667eea; }
-
-    .controls { display: flex; gap: 10px; flex-wrap: wrap; }
-    input#message { flex: 1; min-width: 200px; padding: 15px; border-radius: 25px; border: 2px solid #dee2e6; font-size: 16px; outline: none; }
-    button { padding: 12px 25px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
-    .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
-    .btn-mic { background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; }
-    .btn-unit { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; margin: 5px; font-size: 0.9rem; line-height: 1.4; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
+    .modal.show { display: flex; }
+    .modal-content { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; text-align: center; }
     
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
 </head>
 <body>
 
-  <div class="modal-overlay" id="studentModal">
-    <div class="modal-box">
-      <h2 style="color: #667eea;">🎤 Welcome to Class!</h2>
-      <p style="color: #888; margin-bottom: 10px;">Nhập tên để bắt đầu luyện tập nhé</p>
-      <div class="modal-field">
-        <label style="font-weight: bold; display: block; margin-bottom: 5px;">👤 Họ và tên</label>
-        <input type="text" id="modalName" placeholder="Ví dụ: Nguyễn Văn An">
-      </div>
-      <button class="btn-primary" style="width:100%; padding: 15px;" onclick="confirmInfo()">🚀 Bắt đầu luyện nói</button>
-    </div>
+<div class="modal" id="loginModal">
+  <div class="modal-content">
+    <h3>👤 Nhập tên để bắt đầu</h3>
+    <input type="text" id="studentName" placeholder="Tên của em..." style="width: 100%; margin: 15px 0; padding: 10px; border-radius: 10px; border: 1px solid #ddd;">
+    <button class="btn-send" style="width: 100%;" onclick="startPractice()">🚀 Bắt đầu</button>
+  </div>
+</div>
+
+<div class="container">
+  <h1>🎧 English Practice Grade 10</h1>
+  
+  <div class="card">
+    <h4 style="text-align: center; margin-bottom: 10px;">📚 Chọn Unit bài học</h4>
+    <div id="unitList" style="text-align: center;"></div>
   </div>
 
-  <div class="container">
-    <h1>🎧 English Practice - Grade 10</h1>
-
-    <div class="student-section">
-      <h3 style="text-align: center; margin-bottom: 15px; color: #2c3e50;">📚 Choose Your Unit</h3>
-      <div id="unitButtons" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;"></div>
-    </div>
-
-    <div class="student-section">
-      <h3 id="chatTitle" style="color: #667eea; margin-bottom: 15px;">💬 Chat với cô giáo AI</h3>
-      <div id="chat"></div>
-
-      <div id="score-panel">
-        <div class="score-flex">
-          <div id="score-circle">0</div>
-          <div id="feedback-text"></div>
-        </div>
-      </div>
-
-      <div class="controls">
-        <input id="message" placeholder="Type your answer here...">
-        <button class="btn-primary" onclick="sendMessage()">Send</button>
-        <button id="micBtn" class="btn-mic" onclick="startRecognition()">🎤 Speak</button>
-      </div>
+  <div class="card">
+    <div id="chat"></div>
+    <div class="controls">
+      <input id="userInput" placeholder="Gõ câu trả lời vào đây...">
+      <button class="btn-send" onclick="handleSend()">Gửi</button>
+      <button class="btn-mic" onclick="startMic()">🎤</button>
     </div>
   </div>
+</div>
 
-  <script>
-    const chat = document.getElementById("chat");
-    const messageInput = document.getElementById("message");
-    let selectedUnit = null;
-    let studentName = "";
+<script>
+  let currentUnit = null;
+  let name = "";
+  let scores = [];
+  let recognition = null;
+  let isListening = false;
 
-    // 1. Tải danh sách Unit
-    async function loadUnits() {
-      const res = await fetch("/units/list");
-      const data = await res.json();
-      const container = document.getElementById("unitButtons");
-      data.units.forEach(u => {
-        const btn = document.createElement("button");
-        btn.className = "btn-unit";
-        btn.innerHTML = `<b>Unit ${u.unit}</b><br><small>${u.title}</small>`;
-        btn.onclick = () => { 
-          selectedUnit = u.unit; 
-          document.getElementById('studentModal').classList.add('show'); 
-        };
-        container.appendChild(btn);
-      });
+  async function getUnits() {
+    const r = await fetch("/units/list");
+    const d = await r.json();
+    const div = document.getElementById("unitList");
+    d.units.forEach(u => {
+      const b = document.createElement("button");
+      b.className = "btn-unit";
+      b.innerHTML = `Unit ${u.unit}`;
+      b.onclick = () => { currentUnit = u.unit; document.getElementById("loginModal").classList.add("show"); };
+      div.appendChild(b);
+    });
+  }
+
+  async function startPractice() {
+    name = document.getElementById("studentName").value;
+    if(!name) return alert("Em nhập tên nhé!");
+    document.getElementById("loginModal").classList.remove("show");
+    scores = [];
+    document.getElementById("chat").innerHTML = ""; // Clear chat cũ
+    
+    const r = await fetch("/units/start", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({unit: currentUnit, student_name: name})
+    });
+    const d = await r.json();
+    addMsg("bot", `Chào ${name}! ${d.question}`);
+    speak(d.question);
+  }
+
+  async function handleSend() {
+    const val = document.getElementById("userInput").value;
+    if(!val) return;
+    addMsg("user", val);
+    document.getElementById("userInput").value = "";
+
+    const r = await fetch("/units/answer", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({answer: val})
+    });
+    const d = await r.json();
+
+    if(d.score !== undefined) {
+      scores.push(parseFloat(d.score));
+      addFeedback(d.score, d.feedback);
     }
 
-    // 2. Xác nhận tên học sinh
-    function confirmInfo() {
-      studentName = document.getElementById('modalName').value.trim();
-      if(!studentName) { alert("Vui lòng cho cô biết tên của em!"); return; }
-      document.getElementById('studentModal').classList.remove('show');
-      startConversation();
+    if(d.next_question) {
+      setTimeout(() => {
+        addMsg("bot", d.next_question);
+        speak(d.next_question);
+      }, 1000);
+    } else {
+      const avg = (scores.reduce((a,b) => a+b, 0) / scores.length).toFixed(1);
+      addMsg("bot", `🎉 Chúc mừng ${name}! Em đã hoàn thành bài tập. Điểm trung bình của em là: ${avg}/10`);
+      speak(`Congratulations ${name}! You finished the lesson with an average score of ${avg}`);
     }
+  }
 
-    // 3. Bắt đầu hội thoại
-    async function startConversation() {
-      chat.innerHTML = `<p style="text-align:center; color: #667eea;"><b>⏳ Cô đang chuẩn bị bài Unit ${selectedUnit}...</b></p>`;
-      const res = await fetch("/units/start", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({unit: selectedUnit, student_name: studentName})
-      });
-      const data = await res.json();
-      chat.innerHTML = `<p style="background:#e3f2fd; padding:12px; border-radius:12px; margin-bottom: 10px; border-left: 5px solid #2196f3;"><b>🤖 Bot:</b> Hi ${studentName}! ${data.question}</p>`;
-      speak(data.question);
-    }
+  function addMsg(role, text) {
+    const div = document.getElementById("chat");
+    div.innerHTML += `<div class="${role}-msg"><b>${role === 'bot' ? '🤖' : '👤'}:</b> ${text}</div>`;
+    div.scrollTop = div.scrollHeight;
+  }
 
-    // 4. Gửi tin nhắn và nhận điểm
-    async function sendMessage() {
-      const msg = messageInput.value.trim();
-      if(!msg) return;
-      
-      chat.innerHTML += `<p style="text-align:right; background:#c8e6c9; padding:12px; border-radius:12px; margin:10px 0; border-right: 5px solid #4caf50;"><b>👤 You:</b> ${msg}</p>`;
-      messageInput.value = "";
-      chat.scrollTop = chat.scrollHeight;
+  function addFeedback(score, text) {
+    const color = score >= 8 ? "#27ae60" : (score >= 5 ? "#f39c12" : "#e74c3c");
+    const div = document.getElementById("chat");
+    div.innerHTML += `
+      <div class="feedback-box">
+        <div class="score-circle" style="background:${color}">${score}</div>
+        <div style="font-size:0.9em; flex:1;">${text}</div>
+      </div>`;
+    div.scrollTop = div.scrollHeight;
+  }
 
-      const res = await fetch("/units/answer", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({answer: msg})
-      });
-      const data = await res.json();
+  function speak(t) { 
+    window.speechSynthesis.cancel(); 
+    const m = new SpeechSynthesisUtterance(t); 
+    m.lang='en-US'; 
+    m.rate = 0.9;
+    window.speechSynthesis.speak(m); 
+  }
+  
+  function startMic() {
+    const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!Rec) return alert("Trình duyệt không hỗ trợ Mic");
 
-      // Hiển thị vòng tròn điểm
-      if(data.score !== undefined) {
-        document.getElementById("score-panel").style.display = "block";
-        const circle = document.getElementById("score-circle");
-        circle.innerText = data.score;
-        // Đổi màu: >=8 Xanh, >=5 Vàng, <5 Đỏ
-        circle.style.background = data.score >= 8 ? "#27ae60" : (data.score >= 5 ? "#f39c12" : "#e74c3c");
-        document.getElementById("feedback-text").innerHTML = data.feedback;
-      }
+    const micBtn = document.querySelector(".btn-mic");
 
-      if(data.next_question) {
-        setTimeout(() => {
-          chat.innerHTML += `<p style="background:#e3f2fd; padding:12px; border-radius:12px; margin:10px 0; border-left: 5px solid #2196f3;"><b>🤖 Bot:</b> ${data.next_question}</p>`;
-          speak(data.next_question);
-          chat.scrollTop = chat.scrollHeight;
-        }, 1000);
-      }
-    }
-
-    // 5. Hàm phát âm (Loa)
-    function speak(text) {
-      window.speechSynthesis.cancel();
-      const msg = new SpeechSynthesisUtterance(text);
-      msg.lang = 'en-US';
-      msg.rate = 0.9; // Nói chậm lại một chút cho dễ nghe
-      window.speechSynthesis.speak(msg);
-    }
-
-    // 6. Hàm nhận diện giọng nói (Micro)
-    function startRecognition() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) { alert("Trình duyệt này không hỗ trợ Micro. Chị dùng Chrome hoặc Edge nhé!"); return; }
-      
-      const recognition = new SpeechRecognition();
+    if (!isListening) {
+      recognition = new Rec();
       recognition.lang = 'en-US';
-      recognition.onstart = () => { document.getElementById("micBtn").innerText = "🛑 Đang nghe..."; };
-      recognition.onresult = (event) => { messageInput.value = event.results[0][0].transcript; };
-      recognition.onend = () => { document.getElementById("micBtn").innerText = "🎤 Speak"; };
-      recognition.start();
-    }
+      recognition.continuous = true;
+      recognition.interimResults = true;
 
-    loadUnits();
-  </script>
-</body>
-</html>
+      recognition.onstart = () => {
+        isListening = true;
+        micBtn.innerHTML = "🛑 Stop";
+        micBtn.style.background = "#e74c3c";
+      };
+
+      recognition.onresult = (e) => {
+        let transcript = "";
+        for (let i = 0; i < e.results.length; i++) {
+          transcript += e.results[i][0].transcript;
+        }
+        document.getElementById("userInput").value = transcript;
+      };
+
+      recognition.onerror = () => stopMic();
+      recognition.onend = () => { if(isListening) stopMic(); };
+      recognition.start();
+    } else {
+      stopMic();
+      handleSend();
+    }
+  }
+
+  function stopMic() {
+    if (recognition) {
+      recognition.stop();
