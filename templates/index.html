@@ -5,27 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🎧 English Speaking Practice - Grade 10</title>
   <style>
+    /* ... (Phần Style em giữ nguyên bản đẹp nhất của chị Liên) ... */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
     .container { max-width: 900px; margin: 0 auto; }
     h1 { color: white; text-align: center; margin-bottom: 30px; font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
     .student-section { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin-bottom: 25px; }
     #chat { background: #f8f9fa; padding: 20px; border-radius: 15px; height: 400px; overflow-y: auto; margin-bottom: 20px; border: 2px solid #dee2e6; }
-    
-    /* Style cho vòng tròn điểm số */
-    #score-panel { display: none; background: #fff; border: 2px solid #667eea; border-radius: 15px; padding: 15px; margin-bottom: 15px; animation: fadeIn 0.5s; }
-    .score-flex { display: flex; align-items: center; gap: 20px; }
-    #score-circle { width: 70px; height: 70px; border-radius: 50%; background: #4e73df; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-    #feedback-text { flex: 1; color: #333; font-size: 1rem; line-height: 1.5; }
-
     .controls { display: flex; gap: 10px; flex-wrap: wrap; }
     input { flex: 1; min-width: 200px; padding: 15px; border-radius: 25px; border: 2px solid #dee2e6; font-size: 16px; }
     button { padding: 12px 25px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
     .btn-primary { background: #667eea; color: white; }
     .btn-mic { background: #4facfe; color: white; }
-    .btn-unit { background: #43e97b; color: white; margin: 5px; }
     
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    /* STYLE MỚI CHO VÒNG TRÒN ĐIỂM */
+    #score-display-card { display: none; background: #fffde7; border-left: 5px solid #fbc02d; padding: 15px; border-radius: 12px; margin-bottom: 15px; animation: slideIn 0.3s ease-out; }
+    .score-layout { display: flex; align-items: center; gap: 15px; }
+    #circle-score { width: 60px; height: 60px; border-radius: 50%; background: #27ae60; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.4rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1); flex-shrink: 0; }
+    #feedback-detail { font-size: 0.95rem; color: #333; line-height: 1.5; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
   </style>
 </head>
 <body>
@@ -34,18 +32,18 @@
     <h1>🎧 English Practice - Grade 10</h1>
 
     <div class="student-section">
-      <h3 style="text-align: center; margin-bottom: 15px;">📚 Choose Your Unit</h3>
-      <div id="unitButtons" style="text-align: center;"></div>
+      <h3 style="text-align: center; margin-bottom: 20px;">📚 Choose Your Conversation Unit</h3>
+      <div id="unitButtons" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;"></div>
     </div>
 
     <div class="student-section">
-      <h3 id="chatTitle">💬 Chat với cô giáo AI</h3>
+      <h3 id="chatTitle">💬 Student Chat</h3>
       <div id="chat"></div>
 
-      <div id="score-panel">
-        <div class="score-flex">
-          <div id="score-circle">0</div>
-          <div id="feedback-text">Đang chờ nhận xét...</div>
+      <div id="score-display-card">
+        <div class="score-layout">
+          <div id="circle-score">0</div>
+          <div id="feedback-detail">Nhận xét từ AI...</div>
         </div>
       </div>
 
@@ -60,40 +58,37 @@
   <script>
     const chat = document.getElementById("chat");
     const messageInput = document.getElementById("message");
-    let currentUnit = null;
 
-    // Load danh sách Unit
-    async function loadUnits() {
+    async function loadUnitButtons() {
       const res = await fetch("/units/list");
       const data = await res.json();
       const container = document.getElementById("unitButtons");
       data.units.forEach(u => {
         const btn = document.createElement("button");
-        btn.className = "btn-unit";
-        btn.innerHTML = `Unit ${u.unit}: ${u.title}`;
+        btn.style.background = "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)";
+        btn.style.color = "white";
+        btn.innerHTML = `Unit ${u.unit}<br><small>${u.title}</small>`;
         btn.onclick = () => startUnit(u.unit);
         container.appendChild(btn);
       });
     }
 
-    async function startUnit(unitNum) {
-      currentUnit = unitNum;
-      chat.innerHTML = `<p style="text-align:center;"><b>⏳ Đang tải Unit ${unitNum}...</b></p>`;
+    async function startUnit(uNum) {
+      chat.innerHTML = `<p style="text-align:center;"><b>⏳ Loading Unit ${uNum}...</b></p>`;
       const res = await fetch("/units/start", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({unit: unitNum, student_name: "Học sinh lớp 10"})
+        body: JSON.stringify({unit: uNum, student_name: "Student"})
       });
       const data = await res.json();
-      chat.innerHTML = `<p><b>🤖 Bot:</b> ${data.question}</p>`;
+      chat.innerHTML = `<p style="background:#e3f2fd; border-left:4px solid #2196f3; padding:10px; border-radius:8px;"><b>🤖 Bot:</b> ${data.question}</p>`;
       speak(data.question);
     }
 
     async function sendMessage() {
       const msg = messageInput.value;
-      if(!msg) return;
-      
-      chat.innerHTML += `<p style="text-align:right;"><b>👤 You:</b> ${msg}</p>`;
+      if (!msg) return;
+      chat.innerHTML += `<p style="background:#c8e6c9; border-left:4px solid #4caf50; text-align:right; padding:10px; border-radius:8px; margin: 10px 0;"><b>👤 You:</b> ${msg}</p>`;
       messageInput.value = "";
 
       const res = await fetch("/units/answer", {
@@ -103,34 +98,34 @@
       });
       const data = await res.json();
 
-      // HIỂN THỊ ĐIỂM VÀ FEEDBACK VÀO VÒNG TRÒN
-      if(data.score !== undefined) {
-        document.getElementById("score-panel").style.display = "block";
-        const circle = document.getElementById("score-circle");
+      // CẬP NHẬT ĐIỂM VÀO VÒNG TRÒN
+      if (data.score !== undefined) {
+        document.getElementById("score-display-card").style.display = "block";
+        const circle = document.getElementById("circle-score");
         circle.innerText = data.score;
         
-        // Đổi màu vòng tròn theo điểm
+        // Đổi màu theo điểm
         if(data.score >= 8) circle.style.background = "#27ae60";
         else if(data.score >= 5) circle.style.background = "#f39c12";
         else circle.style.background = "#e74c3c";
 
-        document.getElementById("feedback-text").innerHTML = data.feedback;
+        document.getElementById("feedback-detail").innerHTML = data.feedback;
       }
 
-      if(data.next_question) {
-        chat.innerHTML += `<p><b>🤖 Bot:</b> ${data.next_question}</p>`;
+      if (data.next_question) {
+        chat.innerHTML += `<p style="background:#e3f2fd; border-left:4px solid #2196f3; padding:10px; border-radius:8px;"><b>🤖 Bot:</b> ${data.next_question}</p>`;
         speak(data.next_question);
       }
       chat.scrollTop = chat.scrollHeight;
     }
 
     function speak(text) {
-      const msg = new SpeechSynthesisUtterance(text);
-      msg.lang = 'en-US';
-      window.speechSynthesis.speak(msg);
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      window.speechSynthesis.speak(utterance);
     }
 
-    loadUnits();
+    loadUnitButtons();
   </script>
 </body>
 </html>
