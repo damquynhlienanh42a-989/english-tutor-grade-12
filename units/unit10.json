@@ -1,42 +1,42 @@
 {
-  "unit": 10,
-  "title": "New Ways to Learn App – LangMaster",
+  "title": "Unit 10: Ecosystems (iLearn Smart World 10)",
   "dialogue": [
     {
-      "bot": "Hello! We are very interested in innovative ways to learn. Can you tell us about the project you and your team are working on?",
-      "expected": "Hello! Our project is a new mobile application called 'LangMaster.'"
+      "bot": "Hi! Today we will talk about nature. Do you like spending time in nature, like forests or parks?",
+      "expected": "Yes, I do. I love walking in the park and breathing fresh air."
     },
     {
-      "bot": "What is the main purpose of LangMaster, and what special effect does it bring to learners?",
-      "expected": "Its main purpose is to help users master natural English speaking and pronunciation. Its special effect is giving users real-time feedback on their tone and speed using AI technology."
+      "bot": "That's great! In your opinion, what is the most beautiful natural place in Vietnam?",
+      "expected": "I think Ha Long Bay or Cuc Phuong National Park is the most beautiful place."
     },
     {
-      "bot": "That is an excellent purpose. Let's talk about the user experience. First, what is the very first step a new user must take to begin using LangMaster?",
-      "expected": "First, they must create an account (Step 1) using their email or social media."
+      "bot": "Ecosystems are important. What do you think is the biggest problem for our environment today?",
+      "expected": "I think water pollution and air pollution are the biggest problems."
     },
     {
-      "bot": "Next, after they have created an account, what is the second step they need to complete so LangMaster understands their level?",
-      "expected": "Next, they need to set up their profile (Step 2) by completing a 5-minute speaking test to determine their current English level."
+      "bot": "Many animals are losing their habitats. What should we do to protect wildlife?",
+      "expected": "We should stop cutting down trees and protect the forests."
     },
     {
-      "bot": "Then, what happens after the profile is set up? How does the actual learning process begin?",
-      "expected": "Then, they can start learning (Step 3) immediately with personalized daily lessons based on their specific weaknesses."
+      "bot": "Do you think we should use less plastic to help the environment?",
+      "expected": "Yes, we should. Using less plastic can reduce waste and protect animals."
     },
     {
-      "bot": "And finally, what important feature can they use after the main lesson is finished to continue practicing?",
-      "expected": "Finally, they can connect with other learners (Step 4) or use other features (Step 5), like the daily phrase of the day, to keep practicing and reinforce what they learned."
+      "bot": "Have you ever participated in a clean-up activity at your school or hometown?",
+      "expected": "Yes, I have. I helped pick up trash in my school yard last month."
     },
     {
-      "bot": "That flow is very clear. What is the long-term potential for LangMaster in the market?",
-      "expected": "We see huge potential. We plan to add support for other languages like Spanish and French, turning it into a global language learning platform."
+      "bot": "If you could visit a national park, which one would you choose?",
+      "expected": "I would choose Ba Be National Park because it has a beautiful lake."
     },
     {
-      "bot": "Thank you for explaining your project. It shows a lot of promise!",
-      "expected": ""
+      "bot": "Final question: What is one small thing you do every day to save the Earth?",
+      "expected": "I always turn off the lights when leaving the room to save energy."
     }
   ],
   "extra_questions": [
-    "Would you like to use an app like LangMaster yourself? Why?",
-    "Which feature do you think is the most useful for learners?"
+    "Are you interested in learning about different types of plants?",
+    "Do you think technology can help us protect the environment?",
+    "What is your favorite wild animal?"
   ]
 }
