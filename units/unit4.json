@@ -1,0 +1,42 @@
+{
+  "unit": 4,
+  "title": "International Organizations (Charities)",
+  "dialogue": [
+    {
+      "bot": "Hello! Welcome. What is your name?",
+      "expected": "Hello! My name is ..."
+    },
+    {
+      "bot": "Nice to meet you. How are you feeling today? Are you doing well?",
+      "expected": "I'm doing very well, thank you for asking!"
+    },
+    {
+      "bot": "Good to hear! Today we are discussing international organizations. Do you have a favorite international organization or charity that you like to follow?",
+      "expected": "Yes, I do. I am very interested in Love Earth."
+    },
+    {
+      "bot": "That's a great choice. Let's talk about Love Earth. When was Love Earth set up?",
+      "expected": "It was set up in 1969."
+    },
+    {
+      "bot": "And what is its main aim?",
+      "expected": "Its aim is wildlife conservation."
+    },
+    {
+      "bot": "That's very important work. What work has it done so far?",
+      "expected": "It's helped stop whale hunting for over 50 years."
+    },
+    {
+      "bot": "Wow, that's great. What else has it done?",
+      "expected": "It's organized events to raise awareness about environmental problems."
+    },
+    {
+      "bot": "It sounds like a fantastic organization. Thank you for sharing!",
+      "expected": ""
+    }
+  ],
+  "extra_questions": [
+    "Why do you think international charities are important?",
+    "Would you like to volunteer for an organization like Love Earth someday?"
+  ]
+}

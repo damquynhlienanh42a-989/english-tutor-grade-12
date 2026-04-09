@@ -1,0 +1,38 @@
+{
+  "unit": 11,
+  "title": "Unit 9: Becoming Independent – Life Skills",
+  "dialogue": [
+    {
+      "bot": "Welcome to Unit 9! I am Coach E. 🌟 Let's start: Do you think 'learning to cook' is 'really useful' or 'stressful' for a student like you? Why?",
+      "expected": "I think learning to cook is really useful because I can prepare healthy recipes for myself and save money."
+    },
+    {
+      "bot": "Mature mindset! 💪 Some say it's 'really difficult' for teenagers to 'take care of themselves'. Do you agree, or is it 'easy' for you?",
+      "expected": "I think it is really difficult at first, but it is very important to learn how to take care of yourself to become independent."
+    },
+    {
+      "bot": "Interesting! 🚀 What about a 'part-time job'? Is it 'exciting' or 'stressful' to balance work and study?",
+      "expected": "I think having a part-time job is exciting because I can earn money and gain experience, but it can also be stressful to manage my time."
+    },
+    {
+      "bot": "Great perspective! 🧠 How about 'choosing a career'? Does it feel 'really difficult' or 'easy' at this stage of your life?",
+      "expected": "Choosing a career feels really difficult because there are so many options, but it is very important to find something I am passionate about."
+    },
+    {
+      "bot": "Almost there! 🚗 Do you believe 'knowing how to drive' is 'very convenient' for your future independence?",
+      "expected": "Yes, I believe knowing how to drive is very convenient because it gives me more freedom to travel and be independent."
+    },
+    {
+      "bot": "Final Task! 🎤 Out of all these, which TWO life events are the 'most important' for you to master? What is your future vision for being independent?",
+      "expected": "I think the two most important life skills are taking care of myself and choosing a career, because good health and the right career are the foundation of a truly independent life."
+    },
+    {
+      "bot": "🌟💪 Outstanding! You have shown incredible maturity and wisdom today. I believe in your potential — the future belongs to you! Keep building these life skills one step at a time. 🚀",
+      "expected": ""
+    }
+  ],
+  "extra_questions": [
+    "What is one life skill you want to improve the most this year, and how will you start?",
+    "If you could give one piece of advice about independence to a younger student, what would it be?"
+  ]
+}

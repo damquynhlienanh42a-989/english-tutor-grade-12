@@ -1,0 +1,38 @@
+{
+  "unit": 9,
+  "title": "Travel in Vietnam – Suggestions & Travel Experience",
+  "dialogue": [
+    {
+      "bot": "Hello! Welcome to Vietnam. If someone only had three days to spend here, where would you suggest they should go and what should they do?",
+      "expected": "Hello! I would suggest they go to Hanoi, the capital city. They should spend one day exploring the Old Quarter and trying street food, and another day visiting Hoan Kiem Lake and the Temple of Literature."
+    },
+    {
+      "bot": "That sounds like a great plan. Why do you recommend Hanoi over other places like Ho Chi Minh City or Ha Long Bay?",
+      "expected": "Hanoi has a lot of history and culture. It's easy to walk around, and the food experience is very unique. It offers a perfect blend of the old and the new."
+    },
+    {
+      "bot": "Now, let's talk about your trip. Can you tell me about one memorable experience you had in Vietnam where something unexpected happened?",
+      "expected": "Yes! I had an interesting experience when I was traveling by train from Da Nang to Hue."
+    },
+    {
+      "bot": "What exactly happened during that trip?",
+      "expected": "The train suddenly broke down between two stations. It was late at night, and we were stuck there for about four hours waiting for an engineer to arrive."
+    },
+    {
+      "bot": "Oh dear, that must have been stressful. What was the main problem, and how did you handle it?",
+      "expected": "The main problem was a faulty engine part. I handled it by trying to stay calm. I talked to the other passengers and read a book on my phone to pass the time. The train staff offered free water."
+    },
+    {
+      "bot": "That shows good composure. How did you feel when the train finally started moving again?",
+      "expected": "I felt extremely relieved! I was really happy that the journey could continue, even though I arrived at Hue four hours late."
+    },
+    {
+      "bot": "Thank you for sharing both your travel tips and that surprising story.",
+      "expected": ""
+    }
+  ],
+  "extra_questions": [
+    "Which Vietnamese city would you like to visit next?",
+    "What is your favorite thing about traveling?"
+  ]
+}

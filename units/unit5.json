@@ -1,0 +1,30 @@
+{
+  "unit": 5,
+  "title": "Exam Results",
+  "dialogue": [
+    {
+      "bot": "Hello! Congratulations on your amazing exam results! How do you feel about achieving such high scores in the difficult final exam?",
+      "expected": "I feel so relieved and very happy. I was extremely worried before, but now I'm just grateful."
+    },
+    {
+      "bot": "That's understandable. How long did you spend preparing for this exam?",
+      "expected": "I studied every evening for about a month. I focused mainly on the hardest subjects."
+    },
+    {
+      "bot": "That hard work certainly paid off! What do your teachers and friends think about your results?",
+      "expected": "My teachers are very pleased. My friends also congratulated me and said they knew I could do it!"
+    },
+    {
+      "bot": "So, with the exam stress finally over, what are your plans for the upcoming holiday?",
+      "expected": "I'm going to travel with my family. I want to relax and enjoy a long break!"
+    },
+    {
+      "bot": "That sounds like a perfect plan. Thank you for sharing your experience with us, and we wish you all the best!",
+      "expected": ""
+    }
+  ],
+  "extra_questions": [
+    "Which subject did you find the hardest in the exam?",
+    "Do you have any tips for other students preparing for exams?"
+  ]
+}

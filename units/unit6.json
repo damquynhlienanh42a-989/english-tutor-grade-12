@@ -1,0 +1,30 @@
+{
+  "unit": 6,
+  "title": "Make a Green City Project",
+  "dialogue": [
+    {
+      "bot": "Hello! We are discussing ways to improve our city today. What is your project to improve our city?",
+      "expected": "My project is called 'Make a Green City.'"
+    },
+    {
+      "bot": "That sounds fantastic! What are the main things you plan to do in this project?",
+      "expected": "We have three main ideas. First, we will plant more trees and plants around the city. Second, we want to create more small parks in crowded areas. Third, we will ask the community to join 'City Clean-up Days.'"
+    },
+    {
+      "bot": "Why is planting trees the most important thing for the city?",
+      "expected": "Because trees are the fastest way to improve air quality. They help clean the air and make our city a healthier place to live. Also, green areas make the city more beautiful and relaxing for everyone."
+    },
+    {
+      "bot": "Who do you think will benefit the most from this 'Green City' project?",
+      "expected": "Everyone! Both young and old people will breathe cleaner air and have quiet, green places to walk and relax. This project is for the whole community."
+    },
+    {
+      "bot": "That is a very thoughtful project with great benefits for the community. Thank you for sharing your ideas!",
+      "expected": ""
+    }
+  ],
+  "extra_questions": [
+    "What other ideas do you have to make the city greener?",
+    "Would you like to join a real city clean-up event someday?"
+  ]
+}

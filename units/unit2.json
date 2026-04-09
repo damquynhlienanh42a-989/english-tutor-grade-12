@@ -1,0 +1,54 @@
+{
+  "unit": 2,
+  "title": "Hobbies and Leisure",
+  "dialogue": [
+    {
+      "bot": "Hello! Let's talk about your hobbies. What's your hobby?",
+      "expected": "My hobby is playing chess."
+    },
+    {
+      "bot": "That sounds interesting. Why do you like it?",
+      "expected": "I like it because it helps me improve my thinking skills and concentration."
+    },
+    {
+      "bot": "Very nice. How much money do you spend on it?",
+      "expected": "I don't spend a lot of money. Maybe only about 50,000 VND a month for books and magazines."
+    },
+    {
+      "bot": "And what about time? How much time do you spend on it?",
+      "expected": "I usually spend about 2 hours a day, mostly in the evening."
+    },
+    {
+      "bot": "In your opinion, what's the best thing about your hobby?",
+      "expected": "The best thing is you can play it with friends and learn from better players."
+    },
+    {
+      "bot": "Finally, what kind of people would enjoy it?",
+      "expected": "I think patient people and those who enjoy solving problems would enjoy playing chess."
+    },
+    {
+      "bot": "Now, we'll use some words to describe how much you like or dislike certain activities. Do you like doing karate?",
+      "expected": "No, I can't stand doing karate."
+    },
+    {
+      "bot": "Okay, how about doing crosswords?",
+      "expected": "I don't like it."
+    },
+    {
+      "bot": "What about swimming?",
+      "expected": "I don't mind it."
+    },
+    {
+      "bot": "And lastly, do you like cycling?",
+      "expected": "Yes! I love cycling."
+    },
+    {
+      "bot": "Thank you very much for your open sharing!",
+      "expected": ""
+    }
+  ],
+  "extra_questions": [
+    "Who do you usually enjoy your hobby with?",
+    "Would you like to try any new hobbies in the future?"
+  ]
+}

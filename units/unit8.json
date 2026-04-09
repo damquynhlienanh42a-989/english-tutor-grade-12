@@ -1,0 +1,34 @@
+{
+  "unit": 8,
+  "title": "Environmental Problems and Solutions",
+  "dialogue": [
+    {
+      "bot": "Hello! We are discussing environmental problems today. Do you think our country is facing any serious environmental challenges right now?",
+      "expected": "Hello! Yes, I think water pollution is one of the biggest challenges we are facing."
+    },
+    {
+      "bot": "I agree. It's a very visible problem. Let's focus on that. What is the main environmental problem you have identified?",
+      "expected": "The main problem is water pollution from factories and plastic waste dumped into rivers."
+    },
+    {
+      "bot": "What are the negative effects of this problem?",
+      "expected": "The effects are very serious. First, it kills fish and other aquatic animals. Second, it makes the water unsafe for human use, which can lead to health problems for people living nearby."
+    },
+    {
+      "bot": "That sounds very concerning. Now, let's talk about a solution. What is the solution you propose to solve this problem?",
+      "expected": "We propose a project called 'River Guards.' The main solution is to install better filtration systems in factories and organize regular community clean-ups along riverbanks."
+    },
+    {
+      "bot": "How can this solution solve the problem?",
+      "expected": "The filtration systems will stop toxic chemicals from entering the water directly. The clean-up drives will reduce plastic waste immediately. If the government also enforces stricter laws, we can stop the pollution at the source."
+    },
+    {
+      "bot": "That's a comprehensive approach. Thank you for presenting such a well-thought-out plan to protect our environment!",
+      "expected": ""
+    }
+  ],
+  "extra_questions": [
+    "What other environmental problems worry you the most?",
+    "What can students do to help protect the environment?"
+  ]
+}

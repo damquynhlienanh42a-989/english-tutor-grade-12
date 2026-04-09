@@ -1,0 +1,34 @@
+{
+  "unit": 7,
+  "title": "Technology in Schools Project",
+  "dialogue": [
+    {
+      "bot": "Hello! Today we are discussing ways to improve our community. What is your project to improve our city?",
+      "expected": "My project is called 'Technology in Schools.'"
+    },
+    {
+      "bot": "That sounds very modern! What are the main goals of your project?",
+      "expected": "Our main goals are to buy computers for schools, provide high-speed internet access in all classrooms, and train teachers to use new educational software."
+    },
+    {
+      "bot": "Why do you think providing technology in schools is the best way to improve the community?",
+      "expected": "Because it helps prepare students for the future job market. When students learn computer skills, they become smarter and more competitive. This will eventually lead to a more developed and skilled city workforce."
+    },
+    {
+      "bot": "That's a great long-term benefit. What has the project done so far to achieve these goals?",
+      "expected": "Right now, we are raising money to buy new laptops and we are holding workshops to teach basic coding skills to younger students."
+    },
+    {
+      "bot": "That's active progress! Who do you think benefits the most from this project?",
+      "expected": "The students, of course! But also the parents will benefit because their children have better tools to learn, and the whole city will benefit from a smarter generation."
+    },
+    {
+      "bot": "Thank you for sharing your innovative project idea!",
+      "expected": ""
+    }
+  ],
+  "extra_questions": [
+    "What other technologies would you like to add to schools in the future?",
+    "Do you enjoy learning with technology? Why or why not?"
+  ]
+}

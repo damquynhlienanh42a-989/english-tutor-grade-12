@@ -1,0 +1,31 @@
+{
+  "unit": 12,
+  "title": "Education in the Future",
+  "dialogue": [
+    {
+      "bot": "Welcome to the future! I am your AI assistant. Now, imagine you are the principal of Hong Van Thu High School. What rule would you make about bringing food into the classroom?",
+      "expected": "I would make a rule that students are not allowed to bring food into the classroom to keep it clean and focused."
+    },
+    {
+      "bot": "That's a bold move! Next, what rule would you make about school uniforms?",
+      "expected": "I would require all students to wear uniforms every day so that everyone looks equal and feels proud of their school."
+    },
+    {
+      "bot": "Interesting. Now, how would you reduce students' screen time in your school?",
+      "expected": "I would limit phone use to break times only and encourage students to read books or talk with friends instead."
+    },
+    {
+      "bot": "I see. What is your rule about posting on social media during the lesson?",
+      "expected": "I would ban posting on social media during lessons because it distracts students from learning."
+    },
+    {
+      "bot": "Final question, Principal: Should students be allowed to use tablets instead of notebooks?",
+      "expected": "I think students should be allowed to use tablets because they can access information faster, but they must use them responsibly."
+    },
+    {
+      "bot": "Thank you, Principal! Your rules will make the school of the future amazing. 🏫🚀",
+      "expected": ""
+    }
+  ],
+  "extra_questions": []
+}

@@ -1,0 +1,46 @@
+{
+  "unit": 3,
+  "title": "Shopping Problems",
+  "dialogue": [
+    {
+      "bot": "Hello! We're talking about shopping today. Do you enjoy shopping in general, or do you find it boring?",
+      "expected": "Hello! I usually enjoy shopping, especially buying clothes or electronics."
+    },
+    {
+      "bot": "That's good to hear. Do you prefer shopping online or in physical stores?",
+      "expected": "I usually prefer shopping online because it's more convenient."
+    },
+    {
+      "bot": "I see. Now, I want to ask you about a time when a shopping experience didn't go well. First, what did you buy?",
+      "expected": "I bought a new smartphone online."
+    },
+    {
+      "bot": "And when and where did you buy it?",
+      "expected": "I bought it last week on a popular e-commerce website."
+    },
+    {
+      "bot": "That sounds simple enough. So, what were the problems with the delivery?",
+      "expected": "The delivery was three days late, and the box was damaged when it arrived."
+    },
+    {
+      "bot": "Oh dear. And what were the problems with the item itself? Was the phone okay?",
+      "expected": "The phone screen was cracked right out of the box. It was totally broken."
+    },
+    {
+      "bot": "That is very frustrating! How did you try to solve the problems?",
+      "expected": "I took photos of the damaged box and the cracked screen, and then I called the customer service hotline of the store."
+    },
+    {
+      "bot": "And finally, what do you want the store to do?",
+      "expected": "I want them to send me a brand new phone immediately and pay for the return shipping of the broken one. I don't want a repair; I want a replacement."
+    },
+    {
+      "bot": "Thank you for sharing such a detailed and frustrating experience. Hopefully, the store will resolve it quickly for you!",
+      "expected": ""
+    }
+  ],
+  "extra_questions": [
+    "Have you ever returned an item before?",
+    "What do you think stores should do to improve customer service?"
+  ]
+}

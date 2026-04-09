@@ -1,0 +1,50 @@
+{
+  "unit": 1,
+  "title": "Chores at Home & Describing Family Members",
+  "dialogue": [
+    {
+      "bot": "Hello! Thank you for joining this short interview. We're going to talk a bit about your family life. First, can you tell me what chores you usually do?",
+      "expected": "I usually wash the dishes and tidy my bedroom."
+    },
+    {
+      "bot": "That's great. How often do you wash the dishes?",
+      "expected": "I wash the dishes six times a week, on every day except Sunday."
+    },
+    {
+      "bot": "What about tidying your bedroom? How often do you do that?",
+      "expected": "I tidy my bedroom twice a week, on Wednesdays and Saturdays."
+    },
+    {
+      "bot": "Now, what about your sister or brother? What chores does he or she do?",
+      "expected": "My sister usually dusts the furniture."
+    },
+    {
+      "bot": "How often does she dust the furniture?",
+      "expected": "She dusts the furniture twice a week, on Tuesdays and Fridays."
+    },
+    {
+      "bot": "Let's move on to talk about the personality of your family members. Can you tell me about your brother or another family member?",
+      "expected": "I think my brother is unreliable."
+    },
+    {
+      "bot": "Why do you think so?",
+      "expected": "Because he never arrives on time."
+    },
+    {
+      "bot": "How about your sister? Can you tell me one thing about her?",
+      "expected": "My sister is easygoing, so she shares everything with me."
+    },
+    {
+      "bot": "That sounds lovely. Finally, would you like to tell me about another family member? Perhaps your mother or father?",
+      "expected": "My father is intelligent, so he passes all tests with high scores."
+    },
+    {
+      "bot": "Thank you very much for sharing these interesting details about your family life!",
+      "expected": ""
+    }
+  ],
+  "extra_questions": [
+    "What other chores do you do at home?",
+    "Who helps you the most in your family?"
+  ]
+}
