@@ -1,5 +1,7 @@
 import os
+import psycopg2
 from flask import Flask, render_template, request, jsonify, session
+from psycopg2.extras import Json
 from conversation_logic import ConversationSession
 from data_loader import load_unit, list_available_units
 import evaluator
@@ -7,30 +9,33 @@ import evaluator
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
+def save_to_db(name, unit, score, history):
+    try:
+        conn = psycopg2.connect(os.environ.get("DATABASE_URL"))
+        cur = conn.cursor()
+        cur.execute("""
+            INSERT INTO student_results (student_name, unit_number, score_percentage, qa_pairs) 
+            VALUES (%s, %s, %s, %s)
+        """, (name, unit, score * 10, Json(history)))
+        conn.commit()
+        cur.close(); conn.close()
+    except Exception as e: print(f"DB Error: {e}")
+
 @app.route('/')
-def index():
-    return render_template('index.html')
+def index(): return render_template('index.html')
 
 @app.route('/units/list')
 def list_units():
-    # Trả về đầy đủ các Unit có trong dữ liệu
-    units = []
-    for u_num in sorted(list_available_units()):
-        u_data = load_unit(u_num)
-        if u_data:
-            units.append({"unit": u_num, "title": u_data.get("title", f"Unit {u_num}")})
+    units = [{"unit": u, "title": load_unit(u).get("title", f"Unit {u}")} for u in sorted(list_available_units())]
     return jsonify({"units": units})
 
 @app.route('/units/start', methods=['POST'])
 def start():
     data = request.json
-    unit_num = data.get('unit')
-    session['unit'] = unit_num
+    session['unit'] = data.get('unit')
     session['name'] = data.get('student_name')
-    session['history_count'] = 0 # Đếm số câu đã làm
-    session['scores'] = []
-    
-    conv = ConversationSession(unit_num)
+    session['history'] = []
+    conv = ConversationSession(data.get('unit'))
     return jsonify({"question": conv.get_current_question(), "title": conv.get_title()})
 
 @app.route('/units/answer', methods=['POST'])
@@ -40,24 +45,22 @@ def answer():
     unit_num = session.get('unit')
     
     conv = ConversationSession(unit_num)
-    # Khôi phục đúng vị trí dựa trên số câu đã trả lời
-    count = session.get('history_count', 0)
-    conv.current_index = count
-    
+    history = session.get('history', [])
+    conv.current_index = len(history)
     current_q = conv.get_current_question()
     
-    # AI chấm điểm và sửa lỗi ngữ pháp chuẩn
+    # Chấm điểm thông minh
     res = evaluator.evaluate_answer(ans, current_q)
     
-    # Cập nhật điểm và số câu
-    scores = session.get('scores', [])
-    scores.append(res['score'])
-    session['scores'] = scores
-    session['history_count'] = count + 1
+    history.append({"q": current_q, "a": ans, "s": res['score']})
+    session['history'] = history
     
-    # Tiến tới câu tiếp theo
     next_step = conv.process_answer(ans)
     
+    if next_step['completed']:
+        avg = sum(h['s'] for h in history)/len(history)
+        save_to_db(session['name'], unit_num, avg, history)
+
     return jsonify({
         "score": res['score'],
         "feedback": res['feedback'],
