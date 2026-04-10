@@ -66,7 +66,7 @@
         b.onclick = () => { currentUnit = u.unit; document.getElementById("loginModal").classList.add("show"); };
         div.appendChild(b);
       });
-    } catch(e) { console.error(e); }
+    } catch(e) { console.error("Lỗi tải Unit:", e); }
   }
 
   async function startPractice() {
@@ -74,9 +74,8 @@
     if(!name) return alert("Em hãy nhập tên nhé!");
     document.getElementById("loginModal").classList.remove("show");
     
-    // Mở khóa tiếng
-    const unlock = new SpeechSynthesisUtterance("Welcome");
-    unlock.volume = 0;
+    // Mở khóa âm thanh trình duyệt
+    const unlock = new SpeechSynthesisUtterance("");
     window.speechSynthesis.speak(unlock);
 
     scores = [];
@@ -91,7 +90,7 @@
   }
 
   async function handleSend() {
-    const val = document.getElementById("userInput").value;
+    const val = document.getElementById("userInput").value.trim();
     if(!val) return;
     addMsg("user", val);
     document.getElementById("userInput").value = "";
@@ -113,7 +112,6 @@
         speak(d.next_question); 
       }, 800);
     } else {
-      // Khi không còn câu hỏi nào nữa
       showFinalResult();
     }
   }
@@ -141,12 +139,13 @@
 
   function addFeedback(score, text) {
     const color = score >= 8 ? "#27ae60" : (score >= 5 ? "#f39c12" : "#e74c3c");
-    document.getElementById("chat").innerHTML += `
+    const div = document.getElementById("chat");
+    div.innerHTML += `
       <div class="feedback-box">
         <div class="score-circle" style="background:${color}">${score}</div>
         <div style="font-size:0.9em; flex:1;">${text}</div>
       </div>`;
-    document.getElementById("chat").scrollTop = document.getElementById("chat").scrollHeight;
+    div.scrollTop = div.scrollHeight;
   }
 
   function speak(t) {
@@ -158,20 +157,44 @@
 
   function toggleMic() {
     const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if(!Rec) return alert("Không hỗ trợ Mic");
+    if(!Rec) return alert("Trình duyệt không hỗ trợ Mic");
     const btn = document.getElementById("micBtn");
+    
     if(!isListening) {
-      recognition = new Rec(); recognition.lang = 'en-US'; recognition.continuous = true;
-      recognition.onstart = () => { isListening = true; btn.innerText = "🛑"; btn.style.background = "#e74c3c"; };
+      recognition = new Rec(); 
+      recognition.lang = 'en-US'; 
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      
+      recognition.onstart = () => { 
+        isListening = true; 
+        btn.innerText = "🛑"; 
+        btn.style.background = "#e74c3c"; 
+      };
+      
       recognition.onresult = (e) => { 
         let current = "";
-        for (let i = 0; i < e.results.length; i++) { current += e.results[i][0].transcript; }
+        for (let i = 0; i < e.results.length; i++) {
+          current += e.results[i][0].transcript;
+        }
         document.getElementById("userInput").value = current; 
       };
+      
+      recognition.onerror = () => { stopMic(); };
       recognition.start();
     } else {
-      recognition.stop(); isListening = false; btn.innerText = "🎤"; btn.style.background = "#4facfe";
+      stopMic();
       setTimeout(handleSend, 500);
+    }
+  }
+
+  function stopMic() {
+    if (recognition) {
+      recognition.stop();
+      isListening = false;
+      const btn = document.getElementById("micBtn");
+      btn.innerText = "🎤";
+      btn.style.background = "#4facfe";
     }
   }
 
