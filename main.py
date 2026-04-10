@@ -7,22 +7,30 @@ from data_loader import load_unit, list_available_units
 import evaluator
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+# Sử dụng Secret Key từ Environment hoặc tạo ngẫu nhiên để bảo mật session
+app.secret_key = os.environ.get("SECRET_KEY", os.urandom(24))
 
 def save_to_db(name, unit, score, history):
     try:
-        conn = psycopg2.connect(os.environ.get("DATABASE_URL"))
+        db_url = os.environ.get("DATABASE_URL")
+        if not db_url:
+            print("DB Error: DATABASE_URL not found")
+            return
+        conn = psycopg2.connect(db_url)
         cur = conn.cursor()
         cur.execute("""
             INSERT INTO student_results (student_name, unit_number, score_percentage, qa_pairs) 
             VALUES (%s, %s, %s, %s)
         """, (name, unit, score * 10, Json(history)))
         conn.commit()
-        cur.close(); conn.close()
-    except Exception as e: print(f"DB Error: {e}")
+        cur.close()
+        conn.close()
+    except Exception as e: 
+        print(f"DB Error: {e}")
 
 @app.route('/')
-def index(): return render_template('index.html')
+def index(): 
+    return render_template('index.html')
 
 @app.route('/units/list')
 def list_units():
@@ -49,7 +57,7 @@ def answer():
     conv.current_index = len(history)
     current_q = conv.get_current_question()
     
-    # Chấm điểm thông minh
+    # AI sẽ chấm điểm và trả về feedback Tiếng Anh dựa trên file evaluator.py mới
     res = evaluator.evaluate_answer(ans, current_q)
     
     history.append({"q": current_q, "a": ans, "s": res['score']})
@@ -58,8 +66,9 @@ def answer():
     next_step = conv.process_answer(ans)
     
     if next_step['completed']:
-        avg = sum(h['s'] for h in history)/len(history)
-        save_to_db(session['name'], unit_num, avg, history)
+        if len(history) > 0:
+            avg = sum(h['s'] for h in history) / len(history)
+            save_to_db(session.get('name'), unit_num, avg, history)
 
     return jsonify({
         "score": res['score'],
@@ -69,4 +78,6 @@ def answer():
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    # Render yêu cầu host 0.0.0.0 và port 5000 hoặc theo biến môi trường PORT
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
