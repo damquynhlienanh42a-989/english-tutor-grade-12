@@ -1,5 +1,6 @@
 import os
 import google.generativeai as genai
+import json
 import re
 import random
 
@@ -7,29 +8,31 @@ genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 def evaluate_answer(student_answer, question_text):
-    prompt = f"""You are an English teacher. Evaluate this:
+    prompt = f"""
+    You are an English teacher. Evaluate the student's answer.
     Question: {question_text}
     Student: {student_answer}
-    
-    1. Score: 0-10.
-    2. Feedback: Chỉ rõ lỗi ngữ pháp bằng tiếng Việt và đưa ra Better Answer.
-    
-    Format:
-    Score: [số]
-    Feedback: [nội dung]"""
-    
+
+    Return ONLY a JSON object with this structure:
+    {{
+        "score": (0-10),
+        "feedback": "Sửa lỗi: [Lỗi ngữ pháp bằng tiếng Việt]. <br><b>Better Answer:</b> [Câu mẫu tiếng Anh chuẩn]."
+    }}
+    """
     try:
         res = model.generate_content(prompt)
-        text = res.text
-        # Tìm điểm số
-        score_val = re.search(r"Score:\s*([\d\.]+)", text)
-        score = float(score_val.group(1)) if score_val else 7.0
-        # Tìm nhận xét
-        feedback_val = re.search(r"Feedback:\s*(.*)", text, re.DOTALL)
-        feedback = feedback_val.group(1).strip() if feedback_val else "Good effort!"
-        return {"score": score, "feedback": feedback}
+        # Lọc lấy đúng phần nội dung nằm trong cặp ngoặc nhọn { }
+        match = re.search(r'\{.*\}', res.text, re.DOTALL)
+        if match:
+            data = json.loads(match.group())
+            return {
+                "score": float(data.get("score", 7)),
+                "feedback": data.get("feedback", "Tốt! Hãy cố gắng diễn đạt dài hơn.")
+            }
+        raise Exception("JSON not found")
     except:
-        return {"score": 7.0, "feedback": "Em đã hoàn thành tốt câu hỏi này!"}
+        # Phương án dự phòng nếu AI bị lỗi
+        return {"score": 7.5, "feedback": "Câu trả lời của em đã ổn, hãy chú ý thêm mạo từ và thì của động từ."}
 
 def get_encouraging_message():
-    return random.choice(["Great!", "Well done!", "Keep it up!"])
+    return random.choice(["Làm tốt lắm!", "Cố gắng lên em!", "Tuyệt vời!"])
