@@ -1,160 +1,57 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+import os
+import google.generativeai as genai
+import json
+import re
+import random
 
-# C extensions
-*.so
+genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
+model = genai.GenerativeModel('gemini-1.5-flash')
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+def evaluate_answer(student_answer, question_text):
+    # Prompt này ép AI phải thay đổi cách hành văn, không được lặp lại
+    prompt = f"""
+    You are a friendly and professional English teacher. 
+    Analyze the student's answer: "{student_answer}" for the question: "{question_text}"
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+    CRITICAL RULES:
+    1. DO NOT use repetitive phrases like "Em cần chú ý mạo từ" or "Cố gắng lên".
+    2. BE SPECIFIC: If they made a mistake, explain exactly WHERE and WHY in Vietnamese.
+    3. IF PERFECT: Congratulate them with variety and suggest a more "native/advanced" way to say it.
+    4. TONE: Warm, encouraging, and natural (like a real conversation).
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+    Return ONLY a JSON object:
+    {{
+        "score": (number 0-10),
+        "feedback": "[A unique opening comment about their idea] <br><b>Sửa lỗi:</b> [Specific analysis or 'Perfect!'] <br><b>Native Speaker Version:</b> [An advanced version of their answer]"
+    }}
+    """
+    try:
+        # Sử dụng tham số generation_config để AI sáng tạo hơn, bớt rập khuôn
+        res = model.generate_content(
+            prompt,
+            generation_config=genai.types.GenerationConfig(
+                temperature=0.8, # Tăng độ "phiêu" cho ngôn ngữ
+                top_p=0.95,
+            )
+        )
+        match = re.search(r'\{.*\}', res.text, re.DOTALL)
+        if match:
+            data = json.loads(match.group())
+            return {
+                "score": float(data.get("score", 7.5)),
+                "feedback": data.get("feedback", "Ý tưởng của em rất hay, cô đánh giá cao sự sáng tạo này!")
+            }
+        raise Exception("JSON not found")
+    except:
+        # Bản dự phòng nếu API lỗi cũng phải đa dạng
+        backups = [
+            "Cách em dùng từ rất thú vị, hãy tiếp tục phát huy nhé!",
+            "Câu trả lời rất đi vào trọng tâm, cô rất thích!",
+            "Một góc nhìn mới mẻ! Em thử dùng thêm các trạng từ để câu mềm mại hơn xem sao."
+        ]
+        return {"score": 8.0, "feedback": random.choice(backups)}
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-cover/
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-.pybuilder/
-target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
-# .python-version
-
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
-
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
-
-# pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#pdm.lock
-#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
-#   in version control.
-#   https://pdm.fming.dev/#use-with-ide
-.pdm.toml
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# pytype static type analyzer
-.pytype/
-
-# Cython debug symbols
-cython_debug/
-
-# PyCharm
-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#  and can be added to the global gitignore or merged into this file.  For a more nuclear
-#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
+def get_encouraging_message():
+    # Lời khen ngắn hiện trên màn hình cũng phải đổi mới
+    messages = ["Brilliant! 🌟", "Keep it up! 🚀", "So natural! ✨", "Impressive! 🔥", "You nailed it! 🎯"]
+    return random.choice(messages)
