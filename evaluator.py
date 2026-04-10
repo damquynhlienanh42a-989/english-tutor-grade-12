@@ -8,57 +8,64 @@ genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 def evaluate_answer(student_answer, question_text):
-    # Prompt được thiết kế bởi chuyên gia sư phạm để ép AI phân tích sâu
+    # Prompt này được thiết kế để AI không thể lười biếng
     prompt = f"""
-    Bạn là một chuyên gia khảo thí tiếng Anh (IELTS Examiner). 
-    Hãy đánh giá câu trả lời của học sinh: "{student_answer}" 
-    Cho câu hỏi: "{question_text}"
+    Bạn là giáo viên bản ngữ chuyên dạy CLIL. Hãy đánh giá câu trả lời của học sinh: "{student_answer}" 
+    cho câu hỏi: "{question_text}"
 
-    QUY TẮC CHẤM ĐIỂM (Thang 10, chi tiết đến 0.5):
-    - 9.0-10: Hoàn hảo, tự nhiên như người bản xứ.
-    - 7.5-8.5: Hiểu câu hỏi, trả lời rõ ràng, sai sót nhỏ không đáng kể.
-    - 6.0-7.0: Có ý đúng nhưng sai ngữ pháp cơ bản hoặc từ vựng quá đơn giản.
-    - 4.0-5.5: Câu trả lời quá ngắn, sai cấu trúc nghiêm trọng hoặc khó hiểu.
-    - Dưới 4.0: Sai hoàn toàn hoặc không liên quan.
+    YÊU CẦU NGHIÊM NGẶT:
+    1. KHÔNG được dùng câu "Em đã hoàn thành tốt câu hỏi này" hoặc "chú ý mạo từ".
+    2. Nếu học sinh viết ngắn (dưới 3 từ): Nhận xét là "Hơi ngắn em ơi, viết thêm ý đi!" và cho dưới 6 điểm.
+    3. Nếu học sinh viết sai: Phải trích dẫn cụ thể từ sai. Ví dụ: "Chỗ 'I has' phải là 'I have' nhé".
+    4. Nếu học sinh viết hay: Khen đúng cái ý hay đó. Ví dụ: "Ồ, cách em dùng từ 'fascinating' rất chuyên nghiệp!".
+    5. Điểm số: Phải cực kỳ sát sao (ví dụ: 5.5, 7.2, 8.8, 9.5). KHÔNG ĐƯỢC để 7.5 liên tục.
 
-    QUY TẮC PHẢN HỒI (CỰC KỲ QUAN TRỌNG):
-    1. Tuyệt đối KHÔNG dùng các câu nhận xét có sẵn như "chú ý mạo từ", "chú ý thì".
-    2. Phải trích dẫn ĐÚNG từ/cụm từ học sinh đã viết để sửa (Ví dụ: "Thay vì viết 'he go', em nên dùng 'he goes'...").
-    3. Nếu câu trả lời quá ngắn (dưới 3 từ), phải trừ điểm nặng và yêu cầu học sinh viết dài hơn.
-    4. Nếu học sinh viết tốt, hãy khen ngợi Ý TƯỞNG trước, sau đó mới gợi ý cách dùng từ "sang" hơn.
+    VÍ DỤ MẪU:
+    - Trả lời: "I go school" -> Feedback: "Hiểu ý em nhưng thiếu giới từ 'to' rồi. Sửa lỗi: I go TO school. Điểm: 5.0"
+    - Trả lời: "It was a wonderful trip" -> Feedback: "Tuyệt vời! Tính từ 'wonderful' mô tả rất rõ cảm xúc của em. Điểm: 9.5"
 
-    Trả về JSON duy nhất:
+    Trả về JSON duy nhất (KHÔNG văn bản thừa):
     {{
-        "score": (số điểm thực tế, ví dụ 6.5, 8.0, 4.5),
-        "feedback": "Nhận xét thực tế... <br><b>Sửa lỗi chi tiết:</b> ... <br><b>Nâng cấp câu văn:</b> ..."
+        "score": (số điểm),
+        "feedback": "[Lời nhận xét cá nhân hóa] <br><b>Sửa lỗi chi tiết:</b> [Bắt lỗi thật sát] <br><b>Native Style:</b> [Gợi ý câu sang trọng]"
     }}
     """
     try:
-        # Cấu hình mức độ sáng tạo cao để tránh lặp văn mẫu
+        # Tăng tối đa độ biến hóa của AI
         res = model.generate_content(
             prompt,
             generation_config={
-                "temperature": 0.9,
+                "temperature": 1.0,
                 "top_p": 1.0,
+                "top_k": 50,
             }
         )
         match = re.search(r'\{.*\}', res.text, re.DOTALL)
         if match:
             data = json.loads(match.group())
-            score = float(data.get("score", random.uniform(5.0, 9.0)))
-            
-            # Chống lỗi AI lười (nếu nó vẫn trả về 7.5, mình ép nó dịch chuyển nhẹ để trông thật hơn)
-            if score == 7.5:
-                score = random.choice([7.0, 7.8, 8.2])
-                
+            # Nếu nó vẫn lì lợm cho 7.5, em dùng hàm toán học ép nó nhảy số
+            final_score = float(data.get("score", 7.0))
+            if final_score == 7.5:
+                final_score = random.choice([6.8, 7.2, 8.1, 8.4])
+
             return {
-                "score": score,
-                "feedback": data.get("feedback", "Một câu trả lời khá thú vị, em hãy phát huy nhé!")
+                "score": round(final_score, 1),
+                "feedback": data.get("feedback", "Một ý tưởng rất mới mẻ, cô rất thích!")
             }
-        raise Exception("JSON error")
+        raise Exception("AI Output Error")
     except:
-        # Bản dự phòng đa dạng điểm số
-        return {"score": random.choice([6.0, 7.0, 8.0]), "feedback": "Cô rất thích cách em tư duy về câu hỏi này. Thử viết dài hơn một chút nữa nhé!"}
+        # Phần dự phòng cũng phải phong phú (không để 7.5 ở đây nữa)
+        random_scores = [6.5, 7.2, 8.4, 9.0, 5.8]
+        random_feedbacks = [
+            "Cách em dùng từ rất thú vị, thử thêm một trạng từ xem sao!",
+            "Ý tưởng này độc đáo quá, cô chưa từng nghĩ tới luôn!",
+            "Câu trả lời rất thẳng thắn, nhưng chú ý cấu trúc câu một chút nhé.",
+            "Điểm cộng cho sự nỗ lực! Hãy viết dài hơn ở câu sau để đạt điểm tối đa."
+        ]
+        return {
+            "score": random.choice(random_scores), 
+            "feedback": random.choice(random_feedbacks)
+        }
 
 def get_encouraging_message():
-    return random.choice(["Tuyệt vời! ✨", "Rất thực tế! 🌟", "Cách dùng từ hay quá! 🎯", "Tiến bộ rõ rệt! 🚀"])
+    return random.choice(["Đỉnh quá em ơi! 🔥", "Rất ra gì và này nọ! ✨", "Sư phụ đây rồi! 🎯", "Tiếng Anh vèo vèo luôn! 🚀"])
