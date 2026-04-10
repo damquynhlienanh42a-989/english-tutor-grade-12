@@ -1,71 +1,47 @@
-import os
 import google.generativeai as genai
-import json
-import re
-import random
+import os
 
-genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
+# Cấu hình Gemini API
+# Lưu ý: Bạn phải thêm GEMINI_API_KEY vào 'Secrets' trên Replit hoặc 'Environment Variables' trên Render
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-def evaluate_answer(student_answer, question_text):
-    # Prompt này được thiết kế để AI không thể lười biếng
+def evaluate_answer(answer, question):
     prompt = f"""
-    Bạn là giáo viên bản ngữ chuyên dạy CLIL. Hãy đánh giá câu trả lời của học sinh: "{student_answer}" 
-    cho câu hỏi: "{question_text}"
+    You are an AI English Teacher for Grade 10-12 students.
+    
+    Task: Evaluate the student's answer based on the given question.
+    Question: "{question}"
+    Student's Answer: "{answer}"
+    
+    Instructions:
+    1. Score: 0.0 to 10.0 (Consider grammar, vocabulary, and relevance).
+    2. Feedback: MUST BE IN ENGLISH. 
+    3. No Repetition: Do NOT use generic praise like "Great idea". Be specific.
+    4. Structure:
+       - Point out a specific grammar/spelling mistake.
+       - Provide a 'Suggested sentence' that is more natural.
 
-    YÊU CẦU NGHIÊM NGẶT:
-    1. KHÔNG được dùng câu "Em đã hoàn thành tốt câu hỏi này" hoặc "chú ý mạo từ".
-    2. Nếu học sinh viết ngắn (dưới 3 từ): Nhận xét là "Hơi ngắn em ơi, viết thêm ý đi!" và cho dưới 6 điểm.
-    3. Nếu học sinh viết sai: Phải trích dẫn cụ thể từ sai. Ví dụ: "Chỗ 'I has' phải là 'I have' nhé".
-    4. Nếu học sinh viết hay: Khen đúng cái ý hay đó. Ví dụ: "Ồ, cách em dùng từ 'fascinating' rất chuyên nghiệp!".
-    5. Điểm số: Phải cực kỳ sát sao (ví dụ: 5.5, 7.2, 8.8, 9.5). KHÔNG ĐƯỢC để 7.5 liên tục.
-
-    VÍ DỤ MẪU:
-    - Trả lời: "I go school" -> Feedback: "Hiểu ý em nhưng thiếu giới từ 'to' rồi. Sửa lỗi: I go TO school. Điểm: 5.0"
-    - Trả lời: "It was a wonderful trip" -> Feedback: "Tuyệt vời! Tính từ 'wonderful' mô tả rất rõ cảm xúc của em. Điểm: 9.5"
-
-    Trả về JSON duy nhất (KHÔNG văn bản thừa):
-    {{
-        "score": (số điểm),
-        "feedback": "[Lời nhận xét cá nhân hóa] <br><b>Sửa lỗi chi tiết:</b> [Bắt lỗi thật sát] <br><b>Native Style:</b> [Gợi ý câu sang trọng]"
-    }}
+    Return EXACTLY in this format:
+    Score: [number]
+    Feedback: [Your specific English feedback]
     """
+    
     try:
-        # Tăng tối đa độ biến hóa của AI
-        res = model.generate_content(
-            prompt,
-            generation_config={
-                "temperature": 1.0,
-                "top_p": 1.0,
-                "top_k": 50,
-            }
-        )
-        match = re.search(r'\{.*\}', res.text, re.DOTALL)
-        if match:
-            data = json.loads(match.group())
-            # Nếu nó vẫn lì lợm cho 7.5, em dùng hàm toán học ép nó nhảy số
-            final_score = float(data.get("score", 7.0))
-            if final_score == 7.5:
-                final_score = random.choice([6.8, 7.2, 8.1, 8.4])
-
-            return {
-                "score": round(final_score, 1),
-                "feedback": data.get("feedback", "Một ý tưởng rất mới mẻ, cô rất thích!")
-            }
-        raise Exception("AI Output Error")
-    except:
-        # Phần dự phòng cũng phải phong phú (không để 7.5 ở đây nữa)
-        random_scores = [6.5, 7.2, 8.4, 9.0, 5.8]
-        random_feedbacks = [
-            "Cách em dùng từ rất thú vị, thử thêm một trạng từ xem sao!",
-            "Ý tưởng này độc đáo quá, cô chưa từng nghĩ tới luôn!",
-            "Câu trả lời rất thẳng thắn, nhưng chú ý cấu trúc câu một chút nhé.",
-            "Điểm cộng cho sự nỗ lực! Hãy viết dài hơn ở câu sau để đạt điểm tối đa."
-        ]
-        return {
-            "score": random.choice(random_scores), 
-            "feedback": random.choice(random_feedbacks)
-        }
-
-def get_encouraging_message():
-    return random.choice(["Đỉnh quá em ơi! 🔥", "Rất ra gì và này nọ! ✨", "Sư phụ đây rồi! 🎯", "Tiếng Anh vèo vèo luôn! 🚀"])
+        response = model.generate_content(prompt)
+        text = response.text
+        
+        # Xử lý chuỗi để lấy Score và Feedback
+        score = 5.0
+        feedback = "Good effort! Try to write a longer sentence."
+        
+        if "Score:" in text and "Feedback:" in text:
+            score_str = text.split("Score:")[1].split("Feedback:")[0].strip()
+            # Loại bỏ các ký tự lạ nếu có
+            score = float(''.join(c for c in score_str if c.isdigit() or c == '.'))
+            feedback = text.split("Feedback:")[1].strip()
+            
+        return {"score": score, "feedback": feedback}
+    except Exception as e:
+        print(f"Error in evaluator: {e}")
+        return {"score": 5.0, "feedback": "Nice try! Let's practice more on this topic."}
