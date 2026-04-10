@@ -10,17 +10,18 @@
     .container { max-width: 800px; margin: 0 auto; }
     h1 { color: white; text-align: center; margin-bottom: 20px; font-size: 2em; }
     .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin-bottom: 20px; }
-    #chat { background: #f8f9fa; padding: 15px; border-radius: 15px; height: 350px; overflow-y: auto; border: 1px solid #ddd; margin-bottom: 15px; }
+    #chat { background: #f8f9fa; padding: 15px; border-radius: 15px; height: 380px; overflow-y: auto; border: 1px solid #ddd; margin-bottom: 15px; }
     .bot-msg { background: #e3f2fd; border-left: 5px solid #2196f3; padding: 12px; border-radius: 12px; margin: 10px 0; }
     .user-msg { background: #c8e6c9; border-right: 5px solid #4caf50; padding: 12px; border-radius: 12px; margin: 10px 0; text-align: right; }
     .feedback-box { background: #fffde7; border: 1px dashed #fbc02d; padding: 12px; border-radius: 12px; margin: 10px 0; display: flex; align-items: center; gap: 12px; }
     .score-circle { width: 50px; height: 50px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; font-size: 1.2em; }
+    .final-score { background: #ffeb3b; border: 2px solid #fbc02d; padding: 20px; border-radius: 15px; text-align: center; margin-top: 20px; font-weight: bold; font-size: 1.2em; }
     .controls { display: flex; gap: 8px; }
     input { flex: 1; padding: 12px; border-radius: 25px; border: 1px solid #ddd; outline: none; }
     button { padding: 12px 20px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; color: white; }
     .btn-send { background: #667eea; }
     .btn-mic { background: #4facfe; }
-    .btn-unit { background: #43e97b; color: white; margin: 5px; padding: 10px; font-size: 0.9em; border-radius: 12px; border:none; cursor:pointer;}
+    .btn-unit { background: #43e97b; color: white; margin: 5px; padding: 10px; border-radius: 12px; border:none; cursor:pointer;}
     .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
     .modal.show { display: flex; }
     .modal-content { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 350px; text-align: center; }
@@ -31,14 +32,14 @@
 <div class="modal" id="loginModal">
   <div class="modal-content">
     <h3>👤 Nhập tên để bắt đầu</h3>
-    <input type="text" id="studentName" placeholder="Tên của em..." style="width: 100%; margin: 15px 0; padding: 10px;">
+    <input type="text" id="studentName" placeholder="Tên của em..." style="width: 100%; margin: 15px 0; padding: 10px; border-radius: 10px; border: 1px solid #ddd;">
     <button class="btn-send" style="width: 100%;" onclick="startPractice()">🚀 Bắt đầu</button>
   </div>
 </div>
 
 <div class="container">
   <h1>🎧 English Grade 10</h1>
-  <div class="card"><div id="unitList" style="text-align: center;">Đang tải...</div></div>
+  <div class="card"><div id="unitList" style="text-align: center;">Đang tải bài tập...</div></div>
   <div class="card">
     <div id="chat"></div>
     <div class="controls">
@@ -52,7 +53,6 @@
 <script>
   let currentUnit = null, name = "", scores = [], recognition = null, isListening = false;
 
-  // Tải danh sách bài học
   async function getUnits() {
     try {
       const r = await fetch("/units/list");
@@ -69,14 +69,14 @@
     } catch(e) { console.error(e); }
   }
 
-  // Bắt đầu luyện tập
   async function startPractice() {
     name = document.getElementById("studentName").value;
-    if(!name) return alert("Nhập tên nhé!");
+    if(!name) return alert("Em hãy nhập tên nhé!");
     document.getElementById("loginModal").classList.remove("show");
     
-    // Kích hoạt giọng nói (Mẹo để vượt qua bảo mật trình duyệt)
-    const unlock = new SpeechSynthesisUtterance(" ");
+    // Mở khóa tiếng
+    const unlock = new SpeechSynthesisUtterance("Welcome");
+    unlock.volume = 0;
     window.speechSynthesis.speak(unlock);
 
     scores = [];
@@ -95,24 +95,47 @@
     if(!val) return;
     addMsg("user", val);
     document.getElementById("userInput").value = "";
+    
     const r = await fetch("/units/answer", {
       method: "POST", headers: {"Content-Type": "application/json"},
       body: JSON.stringify({answer: val})
     });
     const d = await r.json();
-    if(d.score !== undefined) { scores.push(parseFloat(d.score)); addFeedback(d.score, d.feedback); }
+
+    if(d.score !== undefined) { 
+      scores.push(parseFloat(d.score)); 
+      addFeedback(d.score, d.feedback); 
+    }
+
     if(d.next_question) {
-      setTimeout(() => { addMsg("bot", d.next_question); speak(d.next_question); }, 800);
+      setTimeout(() => { 
+        addMsg("bot", d.next_question); 
+        speak(d.next_question); 
+      }, 800);
     } else {
+      // Khi không còn câu hỏi nào nữa
+      showFinalResult();
+    }
+  }
+
+  function showFinalResult() {
+    if(scores.length > 0) {
       const avg = (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1);
-      const endMsg = `Chúc mừng ${name}! Điểm TB là: ${avg}/10`;
-      addMsg("bot", endMsg); speak(endMsg);
+      const div = document.getElementById("chat");
+      div.innerHTML += `
+        <div class="final-score">
+          🎉 HOÀN THÀNH BÀI TẬP!<br>
+          Học sinh: <b>${name}</b><br>
+          ĐIỂM TRUNG BÌNH: <span style="font-size: 1.5em; color: #d32f2f;">${avg}/10</span>
+        </div>`;
+      div.scrollTop = div.scrollHeight;
+      speak(`Congratulations ${name}! You finished the lesson with an average score of ${avg}`);
     }
   }
 
   function addMsg(role, text) {
     const div = document.getElementById("chat");
-    div.innerHTML += `<div class="${role}-msg"><b>${role=='bot'?'🤖':'👤'}:</b> ${text}</div>`;
+    div.innerHTML += `<div class="${role}-msg"><b>${role=='bot'?'🤖 Bot':'👤 You'}:</b> ${text}</div>`;
     div.scrollTop = div.scrollHeight;
   }
 
@@ -140,7 +163,11 @@
     if(!isListening) {
       recognition = new Rec(); recognition.lang = 'en-US'; recognition.continuous = true;
       recognition.onstart = () => { isListening = true; btn.innerText = "🛑"; btn.style.background = "#e74c3c"; };
-      recognition.onresult = (e) => { document.getElementById("userInput").value = e.results[e.results.length-1][0].transcript; };
+      recognition.onresult = (e) => { 
+        let current = "";
+        for (let i = 0; i < e.results.length; i++) { current += e.results[i][0].transcript; }
+        document.getElementById("userInput").value = current; 
+      };
       recognition.start();
     } else {
       recognition.stop(); isListening = false; btn.innerText = "🎤"; btn.style.background = "#4facfe";
