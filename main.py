@@ -1,15 +1,11 @@
 import os
 from flask import Flask, render_template, request, jsonify, session
 from conversation_logic import ConversationSession
-import evaluator # Gọi file ở Bước 1
+from data_loader import load_unit, list_available_units
+import evaluator
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-
-# Danh sách bài học (Chị có thể thêm tiếp ở đây)
-UNITS = {
-    1: "Family Life", 10: "Ecosystems" 
-}
 
 @app.route('/')
 def index():
@@ -17,48 +13,56 @@ def index():
 
 @app.route('/units/list')
 def list_units():
-    return jsonify({"units": [{"unit": k, "title": v} for k, v in UNITS.items()]})
+    # Trả về đầy đủ các Unit có trong dữ liệu
+    units = []
+    for u_num in sorted(list_available_units()):
+        u_data = load_unit(u_num)
+        if u_data:
+            units.append({"unit": u_num, "title": u_data.get("title", f"Unit {u_num}")})
+    return jsonify({"units": units})
 
 @app.route('/units/start', methods=['POST'])
-def start_unit():
+def start():
     data = request.json
     unit_num = data.get('unit')
-    student_name = data.get('student_name')
     session['unit'] = unit_num
-    session['name'] = student_name
+    session['name'] = data.get('student_name')
+    session['history_count'] = 0 # Đếm số câu đã làm
     session['scores'] = []
     
     conv = ConversationSession(unit_num)
-    return jsonify({"question": conv.get_current_question(), "title": UNITS.get(unit_num)})
+    return jsonify({"question": conv.get_current_question(), "title": conv.get_title()})
 
 @app.route('/units/answer', methods=['POST'])
-def handle_answer():
+def answer():
     data = request.json
-    ans = data.get('answer')
+    ans = data.get('answer', '')
     unit_num = session.get('unit')
     
-    # Khôi phục vị trí câu hỏi
     conv = ConversationSession(unit_num)
-    current_scores = session.get('scores', [])
-    conv.current_index = len(current_scores)
+    # Khôi phục đúng vị trí dựa trên số câu đã trả lời
+    count = session.get('history_count', 0)
+    conv.current_index = count
     
-    # Lấy đáp án mẫu để AI chấm
-    expected = "" # Có thể lấy từ conv.dialogue nếu có
+    current_q = conv.get_current_question()
     
-    # Chấm điểm từ Bước 1
-    res = evaluator.evaluate_answer(ans, expected)
-    current_scores.append(res['score'])
-    session['scores'] = current_scores
+    # AI chấm điểm và sửa lỗi ngữ pháp chuẩn
+    res = evaluator.evaluate_answer(ans, current_q)
     
-    # Tiến tới câu tiếp
-    next_data = conv.process_answer(ans)
+    # Cập nhật điểm và số câu
+    scores = session.get('scores', [])
+    scores.append(res['score'])
+    session['scores'] = scores
+    session['history_count'] = count + 1
     
-    # Gửi dữ liệu về Giao diện (Đảm bảo tên ngăn kéo là 'score' và 'feedback')
+    # Tiến tới câu tiếp theo
+    next_step = conv.process_answer(ans)
+    
     return jsonify({
         "score": res['score'],
         "feedback": res['feedback'],
-        "next_question": next_data['next_question'],
-        "completed": next_data['completed']
+        "next_question": next_step['next_question'],
+        "completed": next_step['completed']
     })
 
 if __name__ == '__main__':
